@@ -23,10 +23,15 @@ php artisan passport:client:access-token
 
 ## Basic Usage
 
-The order of the fields determine the order they appear in the form.
+The order of the fields determine the order they appear in the form. The url of package can specify a version just like NPM.
+
+`https://unpkg.com/listelixr-js@VERSION/dist/ListElixr.umd.cjs`
+
+and where `VERSION` is, it could be various formats such as `^1.0` `~1.0` `1.0.5`. It's best to lock into a hard version on client sites because that version will work indefinitely and updates wont impact it.
+
 
 ```html
-<script src="https://cdn.js"></script>
+<script src="https://unpkg.com/listelixr-js@1.0.0-beta.4/dist/ListElixr.umd.cjs"></script>
 
 <script>
 var el = document.querySelector('#foo')
@@ -49,7 +54,7 @@ The following will override the default theme. You could create an entirely new 
 Note, the theme is automatically vendor prefixed to prevent the styles from the site overriding those in the plugin. Should you run into style conflicts, you could use this same method to fix the issue.
 
 ```html
-<script src="https://cdn.js"></script>
+<script src="https://unpkg.com/listelixr-js@1.0.0-beta.4/dist/ListElixr.umd.cjs"></script>
 
 <script>
 var el = document.querySelector('#foo')
