@@ -31,7 +31,7 @@ Note, where `VERSION` is, it must be various formats such as `^1.0` `~1.0` `1.0.
 <script src="https://unpkg.com/listelixr-js@1.0.0-beta.4/dist/ListElixr.umd.cjs"></script>
 
 <script>
-var el = document.querySelector('#foo')
+var el = document.querySelector('#foo');
 var key = 'the-access-token-goes-here';
 
 ListElixr.subscribeForm(el, {
@@ -40,7 +40,7 @@ ListElixr.subscribeForm(el, {
     source: 'XXXXX', // optional
     channel: 'YYYYY', // optional
     fields: ['email', 'first', 'last']
-})
+});
 </script>
 
 ```
@@ -63,9 +63,9 @@ Note, the theme is automatically vendor prefixed to prevent the styles from the 
 <script src="https://unpkg.com/listelixr-js@1.0.0-beta.4/dist/ListElixr.umd.cjs"></script>
 
 <script>
-var el = document.querySelector('#foo')
+var el = document.querySelector('#foo');
 var key = 'the-access-token-goes-here';
-var theme = ListElixr.defaultTheme
+var theme = ListElixr.defaultTheme;
 
 theme.merge({
     'button': {
@@ -85,6 +85,6 @@ ListElixr.form(el, {
     key: key,
     theme: theme,
     fields: ['email', 'first', 'last']
-})
+});
 </script>
 ```
