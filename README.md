@@ -50,10 +50,10 @@ var key = 'the-access-token-goes-here';
 // Extend the default theme and override the button colors.
 var theme = ListElixr.defaultTheme.merge({
     'button': {
-        backgroundColor: 'red',
+        background: 'red',
 
         '&:active': {
-            background: 'darkred,'
+            background: 'darkred'
         },
 
         '&:focus': {
