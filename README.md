@@ -85,6 +85,11 @@ var theme = ListElixr.base.merge({
     }
 });
 
+ListElixr.subscribeForm(el, {
+    key: key,
+    theme: theme,
+    fields: ['email', 'first', 'last']
+});
 </script>
 ```
 
@@ -99,6 +104,12 @@ var theme = ListElixr.theme({
     'input, select, textarea': {
         // your form field css here
     }
+});
+
+ListElixr.subscribeForm(el, {
+    key: key,
+    theme: theme,
+    fields: ['email', 'first', 'last']
 });
 </script>
 ```
