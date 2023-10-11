@@ -73,12 +73,7 @@ ListElixr.subscribeForm(el, {
 It's generally advised to start from the `base` theme, which is only a reset stylesheet. This will ensure everything renders correctly across different browsers.
 
 ```html
-<script src="https://unpkg.com/listelixr-js@1.0.0-beta.4/dist/ListElixr.umd.cjs"></script>
-
 <script>
-var el = document.querySelector('#foo');
-var key = 'the-access-token-goes-here';
-
 var theme = ListElixr.base.merge({
     'button': {
         // your button css here
@@ -88,10 +83,20 @@ var theme = ListElixr.base.merge({
     }
 });
 
-ListElixr.subscribeForm(el, {
-    key: key,
-    theme: theme,
-    fields: ['email', 'first', 'last']
+</script>
+```
+
+However, should you want to start completely from scratch you can still do so.
+
+```html
+<script>
+var theme = ListElixr.theme({
+    'button': {
+        // your button css here
+    },
+    'input, select, textarea': {
+        // your form field css here
+    }
 });
 </script>
 ```
