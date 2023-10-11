@@ -45,7 +45,16 @@ ListElixr.subscribeForm(el, {
     fields: ['email', 'first', 'last']
 })
 </script>
+
 ```
+
+### Available Fields
+
+The following are the default fields:
+
+`email`,  `first`, `last`, `street`, `city`, `state`, `zip`, and `phone`.
+
+Should you need to provide custom html structure for the fields, you may also pass an `HTMLElement` that contains an input field with one of the accepted field names.
 
 ## Customizeable Themes
 
