@@ -1,3 +1,10 @@
+# [1.0.0-beta.5](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2023-10-11)
+
+
+### Bug Fixes
+
+* updated api so theme.merge() returns the theme instance. ([4026591](https://github.com/ActiveEngagement/listelixr-js/commit/40265913bcc6009172d9d65ce03a1dd234a1883f))
+
 # [1.0.0-beta.4](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2023-10-11)
 
 
