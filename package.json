@@ -1,0 +1,41 @@
+{
+  "name": "listelixr-js",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "main": "dist/ListElixr.umd.cjs",
+  "module": "dist/ListElixr.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build && tsc --emitDeclarationOnly --project tsconfig.types.json",
+    "preview": "vite preview"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "ie 11",
+      "not dead"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/config-conventional": "^17.7.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/npm": "^10.0.4",
+    "@vue-interface/eslint-config": "^1.0.0-beta.4",
+    "browserslist-to-esbuild": "^1.2.0",
+    "commitlint": "^17.7.1",
+    "dotenv": "^16.3.1",
+    "husky": "^8.0.3",
+    "semantic-release": "^21.0.7",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  },
+  "dependencies": {
+    "goober": "^2.1.13"
+  }
+}
