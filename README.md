@@ -50,7 +50,7 @@ ListElixr.subscribeForm(el, {
 
 ### Available Fields
 
-The following are the default fields:
+The following are the standard fields:
 
 `email`,  `first`, `last`, `street`, `city`, `state`, `zip`, and `phone`.
 
