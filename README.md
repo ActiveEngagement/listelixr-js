@@ -23,12 +23,9 @@ php artisan passport:client:access-token
 
 ## Basic Usage
 
-The order of the fields determine the order they appear in the form. The url of package can specify a version just like NPM.
-
 `https://unpkg.com/listelixr-js@VERSION/dist/ListElixr.umd.cjs`
 
-and where `VERSION` is, it could be various formats such as `^1.0` `~1.0` `1.0.5`. It's best to lock into a hard version on client sites because that version will work indefinitely and updates wont impact it.
-
+Note, where `VERSION` is, it must be various formats such as `^1.0` `~1.0` `1.0.5`. It's best to lock into a hard version on client sites because that version will work indefinitely and updates wont impact it.
 
 ```html
 <script src="https://unpkg.com/listelixr-js@1.0.0-beta.4/dist/ListElixr.umd.cjs"></script>
@@ -54,7 +51,7 @@ The following are the standard fields:
 
 `email`,  `first`, `last`, `street`, `city`, `state`, `zip`, and `phone`.
 
-Should you need to provide custom html structure for the fields, you may also pass an `HTMLElement` that contains an input field with one of the accepted field names.
+The order of the fields determine the order they appear in the form. Should you need to provide custom html structure for the fields, you may also pass an `HTMLElement` that contains an input field with one of the accepted field names.
 
 ## Customizeable Themes
 
