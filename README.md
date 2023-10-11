@@ -79,7 +79,7 @@ theme.merge({
     }
 });
 
-ListElixr.form(el, {
+ListElixr.subscribeForm(el, {
     key: key,
     theme: theme,
     fields: ['email', 'first', 'last']
