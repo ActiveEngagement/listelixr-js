@@ -4,7 +4,7 @@ import { Ref, computed, ref } from './signal';
 export type Theme = {
     css: Ref<CSSAttribute>,
     className: Ref<string>,
-    merge: (...args: CSSAttribute[]) => void
+    merge: (...args: CSSAttribute[]) => Theme
 }
 
 function mergeCSSAttributes(target: CSSAttribute, source: CSSAttribute): CSSAttribute {
@@ -32,13 +32,17 @@ export function theme(props: CSSAttribute): Theme {
         for(const arg of args) {
             css.value = mergeCSSAttributes(css.value, arg);
         }
+
+        return instance;
     }
 
-    return {
+    const instance = {
         css,
         className,
         merge
     };
+
+    return instance;
 }
 
 export const base = theme({

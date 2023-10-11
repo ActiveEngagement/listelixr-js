@@ -38,15 +38,15 @@ The order of the fields determine the order they appear in the form. Should you 
 
 The following will extend the default theme. You could create an entirely new theme from scratch, but this example just shows how to override the submit button color. Should you run into style conflicts, you could add `!important` or whatever you need to fix the conflicting styles.
 
+Note, the theme syntax is CSS-in-JS or (JSS) syntax.
+
 ```html
 <script src="https://unpkg.com/listelixr-js@1.0.0-beta.4/dist/ListElixr.umd.cjs"></script>
 
 <script>
 var el = document.querySelector('#foo');
 var key = 'the-access-token-goes-here';
-var theme = ListElixr.defaultTheme;
-
-theme.merge({
+var theme = ListElixr.defaultTheme.merge({
     'button': {
         backgroundColor: 'red',
 
@@ -57,6 +57,34 @@ theme.merge({
         '&:focus': {
             boxShadow: '0px 0px 0px 3px rgb(255, 0, 0, .5)',
         }
+    }
+});
+
+ListElixr.subscribeForm(el, {
+    key: key,
+    theme: theme,
+    fields: ['email', 'first', 'last']
+});
+</script>
+```
+
+### Creating a Custom Theme
+
+It's generally advised to start from the `base` theme, which is only a reset stylesheet. This will ensure everything renders correctly across different browsers.
+
+```html
+<script src="https://unpkg.com/listelixr-js@1.0.0-beta.4/dist/ListElixr.umd.cjs"></script>
+
+<script>
+var el = document.querySelector('#foo');
+var key = 'the-access-token-goes-here';
+
+var theme = ListElixr.base.merge({
+    'button': {
+        // your button css here
+    },
+    'input, select, textarea': {
+        // your form field css here
     }
 });
 
