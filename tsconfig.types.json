@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext",
+      "moduleResolution": "Bundler",
+      "importHelpers": true,
+      "jsx": "preserve",
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      "sourceMap": true,
+      "baseUrl": "./sr",
+      "strict": false,
+      "paths": {},
+      "allowJs": true,
+      "allowSyntheticDefaultImports": true,
+      "skipLibCheck": true,
+      "declaration": true,
+      "emitDeclarationOnly": true,
+      "outDir": "./dist"
+    },
+    "include": ["src"]
+  }
+  
