@@ -55,9 +55,7 @@ The order of the fields determine the order they appear in the form. Should you 
 
 ## Customizeable Themes
 
-The following will override the default theme. You could create an entirely new theme, override as much or as little as you want, but this example just shows how to override the submit button color.
-
-Note, the theme is automatically vendor prefixed to prevent the styles from the site overriding those in the plugin. Should you run into style conflicts, you could use this same method to fix the issue.
+The following will extend the default theme. You could create an entirely new theme from scratch, but this example just shows how to override the submit button color. Should you run into style conflicts, you could add `!important` or whatever you need to fix the conflicting styles.
 
 ```html
 <script src="https://unpkg.com/listelixr-js@1.0.0-beta.4/dist/ListElixr.umd.cjs"></script>
