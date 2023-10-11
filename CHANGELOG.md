@@ -1,3 +1,10 @@
+# [1.0.0-beta.2](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2023-10-11)
+
+
+### Bug Fixes
+
+* added dist to gitignore until we decide to publish to npm ([2df4277](https://github.com/ActiveEngagement/listelixr-js/commit/2df4277adb7b1fca603d816f22f3bd825625efae))
+
 # 1.0.0-beta.1 (2023-10-11)
 
 
