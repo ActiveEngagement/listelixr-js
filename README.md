@@ -76,6 +76,8 @@ It's generally advised to start from the `base` theme, which is only a reset sty
 
 ```html
 <script>
+// ....
+
 var theme = ListElixr.base.merge({
     'button': {
         // your button css here
@@ -85,11 +87,7 @@ var theme = ListElixr.base.merge({
     }
 });
 
-ListElixr.subscribeForm(el, {
-    key: key,
-    theme: theme,
-    fields: ['email', 'first', 'last']
-});
+// ....
 </script>
 ```
 
@@ -97,6 +95,8 @@ However, should you want to start completely from scratch you can still do so.
 
 ```html
 <script>
+// ....
+
 var theme = ListElixr.theme({
     'button': {
         // your button css here
@@ -106,11 +106,7 @@ var theme = ListElixr.theme({
     }
 });
 
-ListElixr.subscribeForm(el, {
-    key: key,
-    theme: theme,
-    fields: ['email', 'first', 'last']
-});
+// ....
 </script>
 ```
 
