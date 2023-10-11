@@ -9,7 +9,7 @@ This is a widget that allows clients to embed a form on their website to automat
 Note, where `VERSION` is, it must be various formats such as `^1.0` `~1.0` `1.0.5`. It's best to lock into a hard version on client sites because that version will work indefinitely and updates wont impact it.
 
 ```html
-<script src="https://unpkg.com/listelixr-js@1.0.0-beta.4/dist/ListElixr.umd.cjs"></script>
+<script src="https://unpkg.com/listelixr-js@1.0.0-beta.5/dist/ListElixr.umd.cjs"></script>
 
 <script>
 var el = document.querySelector('#foo');
@@ -41,7 +41,7 @@ The following will extend the default theme. You could create an entirely new th
 Note, the theme syntax is CSS-in-JS or (JSS) syntax.
 
 ```html
-<script src="https://unpkg.com/listelixr-js@1.0.0-beta.4/dist/ListElixr.umd.cjs"></script>
+<script src="https://unpkg.com/listelixr-js@1.0.0-beta.5/dist/ListElixr.umd.cjs"></script>
 
 <script>
 var el = document.querySelector('#foo');
