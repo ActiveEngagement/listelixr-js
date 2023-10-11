@@ -46,6 +46,8 @@ Note, the theme syntax is CSS-in-JS or (JSS) syntax.
 <script>
 var el = document.querySelector('#foo');
 var key = 'the-access-token-goes-here';
+
+// Extend the default theme and override the button colors.
 var theme = ListElixr.defaultTheme.merge({
     'button': {
         backgroundColor: 'red',
