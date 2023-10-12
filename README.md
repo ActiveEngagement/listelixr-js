@@ -115,7 +115,9 @@ var theme = ListElixr.theme({
 Should you need the derived CSS class name that is used to scope the css, you can get it using the following code:
 
 ```js
-var theme = ListElixr.defaultTheme;
+var theme = ListElixr.defaultTheme.merge({
+    // whatever...
+});
 
 console.log(theme.className.value);
 console.log(theme.css.value); // Gets the CSS object.
