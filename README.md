@@ -110,6 +110,17 @@ var theme = ListElixr.theme({
 });
 ```
 
+### CSS Class Name
+
+Should you need the derived CSS class name that is used to scope the css, you can get it using the following code:
+
+```js
+var theme = ListElixr.defaultTheme;
+
+console.log(theme.className.value);
+console.log(theme.css.value); // Gets the CSS object.
+```
+
 ## Access Tokens
 
 Each access token is scoped to a catalog id. This ensures users can only be subscribed to a predetermined catalog, and can never be determined by the request body. To generate an access token, you must know the CLIENT_ID and CLIENT_SECRET of the ListElixr Client Credentials Grant.
