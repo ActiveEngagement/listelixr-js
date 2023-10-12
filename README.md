@@ -36,9 +36,7 @@ The order of the fields determine the order they appear in the form. Should you 
 
 ## Customizeable Themes
 
-The following will extend the default theme. You could create an entirely new theme from scratch, but this example just shows how to override the submit button color. Should you run into style conflicts, you could add `!important` or whatever you need to fix the conflicting styles.
-
-Note, the theme syntax is CSS-in-JS or (JSS) syntax.
+The following will extend the default theme. You could create an entirely new theme from scratch, but this example just shows how to override the submit button color.
 
 ```html
 <script src="https://unpkg.com/listelixr-js@1.0.0-beta.5/dist/ListElixr.umd.cjs"></script>
@@ -68,6 +66,20 @@ ListElixr.subscribeForm(el, {
     fields: ['email', 'first', 'last']
 });
 </script>
+```
+
+### CSS Conflicts
+
+Should the CSS of the form and client website conflict, you may have to add `!important` or more speficity to the CSS rules so the form takes precedent. This shouldn't happen by default, as the CSS in the plugin is scoped. But its certainly still possible.
+
+For example, lets say the client CSS was overriding the border. You could fix it like so...
+
+```js
+var theme = ListElixr.defaultTheme.merge({
+    '.form-control': {
+        border: '1px solid #e0e0e0 !important',
+    }
+});
 ```
 
 ### Creating a Custom Theme
