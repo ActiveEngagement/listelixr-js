@@ -1,3 +1,10 @@
+# [1.0.0-beta.13](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.12...v1.0.0-beta.13) (2023-11-02)
+
+
+### Bug Fixes
+
+* issue with memory reference ([e371e90](https://github.com/ActiveEngagement/listelixr-js/commit/e371e90d376d1cb1fddb360f75dbaf21a349c2ba))
+
 # [1.0.0-beta.12](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2023-11-02)
 
 
