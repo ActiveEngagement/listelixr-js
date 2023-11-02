@@ -2,8 +2,8 @@ import { ElementOptions, el } from './dom';
 import { Ref, ref, watchEffect } from './signal';
 import { Theme, defaultTheme } from './theme';
 
-export const fields: Record<FieldAlias, Element> = {
-    email: formField({
+export const fields: Record<FieldAlias, () => Element> = {
+    email: () => formField({
         tagName: 'input',
         label: 'Email',
         attrs: {
@@ -14,7 +14,7 @@ export const fields: Record<FieldAlias, Element> = {
             placeholder: 'you@example.com'
         }
     }),
-    first: formField({
+    first: () => formField({
         tagName: 'input',
         label: 'First Name',
         attrs: {
@@ -23,7 +23,7 @@ export const fields: Record<FieldAlias, Element> = {
             id: 'first',
         }
     }),
-    last: formField({
+    last: () => formField({
         tagName: 'input',
         label: 'Last Name',
         attrs: {
@@ -32,7 +32,7 @@ export const fields: Record<FieldAlias, Element> = {
             id: 'last',
         }
     }),
-    street: formField({
+    street: () => formField({
         tagName: 'input',
         label: 'Street Address',
         attrs: {
@@ -41,7 +41,7 @@ export const fields: Record<FieldAlias, Element> = {
             id: 'street',
         }
     }),
-    city: formField({
+    city: () => formField({
         tagName: 'input',
         label: 'City',
         attrs: {
@@ -50,7 +50,7 @@ export const fields: Record<FieldAlias, Element> = {
             id: 'city',
         }
     }),
-    state: formField({
+    state: () => formField({
         tagName: 'input',
         label: 'State',
         attrs: {
@@ -59,7 +59,7 @@ export const fields: Record<FieldAlias, Element> = {
             id: 'city',
         }
     }),
-    zip: formField({
+    zip: () => formField({
         tagName: 'input',
         label: 'Zipcode',
         attrs: {
@@ -68,7 +68,7 @@ export const fields: Record<FieldAlias, Element> = {
             id: 'zip',
         }
     }),
-    phone: formField({
+    phone: () => formField({
         tagName: 'input',
         label: 'Phone Number',
         attrs: {
@@ -111,7 +111,7 @@ export function subscribeForm(src: Element | null, options: SubscribeFormOptions
                 return Array.from(parent.childNodes);
             }
 
-            return options.fields.map(field => fields[field]).concat(el({
+            return options.fields.map(field => fields[field]()).concat(el({
                 tagName: 'button',
                 children: ['Subscribe']
             }));
