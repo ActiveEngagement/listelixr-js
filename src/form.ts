@@ -1,6 +1,6 @@
 import { ElementOptions, el } from './dom';
 import { Ref, ref, watchEffect } from './signal';
-import { Theme } from './theme';
+import { Theme, defaultTheme } from './theme';
 
 export const fields: Record<FieldAlias, Element> = {
     email: formField({
@@ -100,11 +100,10 @@ export type SubscribeFormOptions = {
 export type FieldErrors = string[];
 
 export function subscribeForm(src: Element | null, options: SubscribeFormOptions) {
-    
     const form = el({
         el: src,
         tagName: 'form',
-        class: options.css?.className?.value,
+        class: options.css?.className?.value ?? defaultTheme.className.value,
         // attrs: {
         //     novalidate: 'novalidate'
         // },

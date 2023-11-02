@@ -4,23 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://unpkg.com/listelixr-js@1.0.0-beta.6/dist/ListElixr.umd.cjs"></script>
+    <script src="https://unpkg.com/listelixr-js@1.0.0-beta.7/dist/ListElixr.umd.js"></script>
 </head>
 <body>
+    <div id="foo"></div>
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            console.log(ListElixr)
-        });
-
-        // var el = document.querySelector('#foo');
+        var el = document.querySelector('#foo');
         
-        // ListElixr.subscribeForm(el, {
-        //     key: "db5d9aa5c679026a26528b4dc89b636d",
-        //     fields: ["email","first","last"],
-        //     tags: ["\"test\"","\"asd\""],
-        //     channel: "1",
-        //     source: "2"
-        // });
+        ListElixr.subscribeForm(el, {
+            key: "db5d9aa5c679026a26528b4dc89b636d",
+            fields: ["email","first","last"],
+            tags: ["\"test\"","\"asd\""],
+            channel: "1",
+            source: "2"
+        });
     </script>    
 </body>
 </html>
