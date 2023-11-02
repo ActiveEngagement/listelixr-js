@@ -1,3 +1,10 @@
+# [1.0.0-beta.12](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2023-11-02)
+
+
+### Bug Fixes
+
+* default theme ([b50d44f](https://github.com/ActiveEngagement/listelixr-js/commit/b50d44f1c1a832a43341c17454cf07eb7915e6ba))
+
 # [1.0.0-beta.11](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.10...v1.0.0-beta.11) (2023-11-02)
 
 
