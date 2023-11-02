@@ -1,251 +1,82 @@
-import { Ref, computed, ref, watchEffect } from './signal';
-import states from './states';
-import { Theme, defaultTheme } from './theme';
+import { ElementOptions, el } from './dom';
+import { Ref, ref, watchEffect } from './signal';
+import { Theme } from './theme';
 
-export type FieldAttributes = {
-    name: string,
-    label?: string,
-    id?: string,
-    value?: string
-} & Record<string,string>
-
-export type Attributes = Partial<HTMLElement>
-
-export type WriteableProps<T> = {
-    [K in keyof T]: T[K] extends Readonly<any> ? never : T[K];
-};
-
-export type ChildNode = HTMLElement | string | undefined;
-
-export function el<T extends HTMLElement>(tagName: string, attrs?: Record<string,string|undefined>, children?: ChildNode | ChildNode[]): T {
-    const el = document.createElement(tagName);
-
-    if(attrs) {
-        for(const [key, value] of Object.entries(attrs)) {
-            if(value === undefined) {
-                continue;
-            }
-            
-            el.setAttribute(key, value);
-        }
-    }
-
-    if(children) {
-        const nodes = Array.isArray(children) ? children : [children];
-
-        for(const node of nodes) {
-            if(!node) {
-                continue;
-            }
-
-            el.append(node);
-        }
-    }
-
-    return el as T;
-}
-
-export function fieldErrors(errors?: FieldErrors) {
-    return el<HTMLDivElement>('div', {
-        class: 'field-errors',
-        style: !errors?.length ? 'display: none' : undefined
-    }, errors?.map(error => el<HTMLDivElement>('div', {
-        class: 'field-error'
-    }, error)));
-}
-
-export function field<T extends HTMLElement>(tagName: string, attrs: FieldAttributes) {
-    const field = el<T>(tagName, attrs);
-
-    const label = attrs.label && el<HTMLLabelElement>('label', {
-        class: 'form-label',
-        for: attrs.id
-    }, [
-        attrs.label,
-        attrs.required ? el('sup', undefined, '*') : undefined,
-    ]);
-    
-    return el<HTMLDivElement>('div', {
-        class: 'form-field'
-    }, [ label, field, fieldErrors() ]);
-}
-
-export function input(attrs: FieldAttributes) {
-    return field('input', { class: 'form-control', ...attrs });
-}
-
-export function textarea(attrs: FieldAttributes) {
-    return field('textarea', { class: 'form-control', ...attrs });
-}
-
-export type SelectFieldOptions = {
-    value: string,
-    label?: string
-}[]
-
-export function select(attrs: FieldAttributes, options: SelectFieldOptions) {
-    const wrapper = field('select', { class: 'form-control', ...attrs });
-    
-    const select = wrapper.querySelector('select') as HTMLSelectElement;
-
-    for(const { value, label } of options) {
-        const option = el<HTMLOptionElement>('option');
-
-        option.value = value;
-        option.innerText = label ?? value;
-
-        select.appendChild(option);
-    }
-
-    return wrapper;
-}
-
-export type FieldComponent = {
-    el: HTMLElement,
-    input: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    value: Ref<string>
-    errors: Ref<FieldErrors>
-    name: string
-    mount(parent: HTMLElement): void
-    unmount(): void
-}
-
-export const fields = {
-    email: input({
+export const fields: Record<FieldAlias, Element> = {
+    email: formField({
+        tagName: 'input',
         label: 'Email',
-        name: 'email',
-        id: 'email',
-        type: 'email',
-        required: 'required',
-        placeholder: 'you@example.com'
+        attrs: {
+            type: 'email',
+            name: 'email',
+            id: 'email',
+            required: 'required',
+            placeholder: 'you@example.com'
+        }
     }),
-    first: input({
+    first: formField({
+        tagName: 'input',
         label: 'First Name',
-        name: 'first',
-        id: 'first',
+        attrs: {
+            type: 'text',
+            name: 'first',
+            id: 'first',
+        }
     }),
-    last: input({
+    last: formField({
+        tagName: 'input',
         label: 'Last Name',
-        name: 'last',
-        id: 'last',
+        attrs: {
+            type: 'text',
+            name: 'last',
+            id: 'last',
+        }
     }),
-    street: input({
+    street: formField({
+        tagName: 'input',
         label: 'Street Address',
-        name: 'street',
-        id: 'street',
+        attrs: {
+            type: 'text',
+            name: 'street',
+            id: 'street',
+        }
     }),
-    city: input({
+    city: formField({
+        tagName: 'input',
         label: 'City',
-        name: 'city',
-        id: 'city',
+        attrs: {
+            type: 'text',
+            name: 'city',
+            id: 'city',
+        }
     }),
-    state: select({
+    state: formField({
+        tagName: 'input',
         label: 'State',
-        name: 'state',
-        id: 'state',
-    }, states),
-    zip: input({
-        label: 'Zipcode',
-        name: 'zip',
-        id: 'zip',
+        attrs: {
+            type: 'text',
+            name: 'state',
+            id: 'city',
+        }
     }),
-    phone: input({
+    zip: formField({
+        tagName: 'input',
+        label: 'Zipcode',
+        attrs: {
+            type: 'text',
+            name: 'zip',
+            id: 'zip',
+        }
+    }),
+    phone: formField({
+        tagName: 'input',
         label: 'Phone Number',
-        name: 'Phone',
-        type: 'phone',
-        id: 'phone',
+        attrs: {
+            type: 'text',
+            name: 'phone',
+            id: 'phone',
+        }
     })
-};
-
-export function component(wrapper: HTMLElement): FieldComponent {
-    const input = findInputField(wrapper);
-
-    if(!input) {
-        throw Error('Components must have a valid input field.');
-    }
-
-    const name = input.getAttribute('name');
-
-    if(!name) {
-        throw Error('Component input fields must have a name attribute.');
-    }
-
-    const value = ref<string>(input?.value);
-    const errors = ref<FieldErrors>([]);
-
-    watchEffect(() => {
-        const el = fieldErrors(errors.value);
-        const replace = wrapper.querySelector('.field-errors');
-
-        if(replace) {
-            replace.replaceWith(el);
-        }
-        else {
-            wrapper.appendChild(el);
-        }
-
-        if(errors.value.length) {
-            wrapper.classList.add('has-errors');
-        }
-        else {
-            wrapper.classList.remove('has-errors');
-        }
-    });
-
-    input.addEventListener('input', () => value.value = input.value);
-
-    function mount(parent: HTMLElement) {
-        parent.appendChild(wrapper);
-    }
-
-    function unmount() {
-        wrapper.remove();
-    }
-
-    return {
-        el: wrapper,
-        name,
-        input,
-        value,
-        errors,
-        mount,
-        unmount
-    };
-}
-
-export type FieldErrors = string[]
-
-export function findInputField(el: Element) {
-    if(el instanceof HTMLInputElement) {
-        return el;
-    }
-
-    if(el instanceof HTMLSelectElement) {
-        return el;
-    }
-
-    if(el instanceof HTMLTextAreaElement) {
-        return el;
-    }
-
-    return el.querySelector('input')
-        ?? el.querySelector('select')
-        ?? el.querySelector('textarea');
-}
-
-export type SubscribeFormOptions = {
-    key: string,
-    theme?: Theme,
-    button?: string | [Record<string,string>] | [Record<string,string>, ChildNode | ChildNode[]]
-    fields: (HTMLElement|FieldAlias)[],
-    tags?: string[]
-    source?: string
-    channel?: string
-}
-
-export type FailedResponse = {
-    errors: Record<string,string[]>,
-    messages: []
 };
 
 export type FieldAlias = 'first'
@@ -257,109 +88,234 @@ export type FieldAlias = 'first'
     | 'zip'
     | 'phone';
 
-export class SubscribeForm {
-    el: HTMLFormElement;
-    key: string;
-    theme: Theme;
-    tags?: string[];
-    source?: string;
-    channel?: string;
-    fields: FieldComponent[] = [];
-    data: Ref<Record<string,string>>;
+export type SubscribeFormOptions = {
+    key: string,
+    css?: Theme,
+    button?: string | [Record<string,string>] | [Record<string,string>, ChildNode | ChildNode[]]
+    fields: FieldAlias[],
+    tags?: string[]
+    source?: string
+    channel?: string
+}
+export type FieldErrors = string[];
 
-    constructor(
-        public readonly parent: HTMLElement,
-        options: SubscribeFormOptions
-    ) {
-        this.el = el<HTMLFormElement>('form');
-        this.el.classList.add('elixr');
-        this.key = options.key;
-        this.tags = options.tags;
-        this.source = options.source;
-        this.channel = options.channel;
-        this.theme = options.theme ?? defaultTheme;
-
-        let themeClassName = this.theme.className.value;
-        
-        watchEffect(() => {
-            this.el.classList.remove(themeClassName);
-
-            themeClassName = this.theme.className.value;
-
-            this.el.classList.add(themeClassName);
-        });
-
-        for(const field of options.fields) {
-            const index = this.fields.push(
-                component(typeof field === 'string' ? fields[field] : field)
-            ) - 1;
-
-            this.fields[index].mount(this.el);
-        }
-        
-        this.data = computed(() => {
-            return this.fields.reduce((carry, { name, value }) => {
-                return Object.assign(carry, {
-                    [name]: value.value
-                });
-            }, {});
-        });
-
-        this.el.append(el<HTMLButtonElement>(
-            'button',
-            Array.isArray(options.button) ? options.button[0] : undefined,
-            (Array.isArray(options.button) ? options.button[1] : options.button) ?? 'Subscribe'
-        ));
-
-        this.el.onsubmit = e => {
-            this.submit();
-
-            e.preventDefault();
-        };
-
-        parent.appendChild(this.el);
-    }
-
-    async submit() {
-        const response = await fetch(import.meta.env.VITE_APP_URL, {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.key}`,
-            },
-            body: JSON.stringify({
-                ...this.data.value,
-                tags: this.tags,
-                source: this.source,
-                channel: this.channel
-            })
-        });
-
-        if(response.ok) {
-            return response;
-        }
-        
-        const { errors }: FailedResponse = await response.json();
-
-        for(const [key, value] of Object.entries(errors)) {
-            const field = this.field(key);
-
-            if(!field) {
-                continue;
+export function subscribeForm(src: Element | null, options: SubscribeFormOptions) {
+    
+    const form = el({
+        el: src,
+        tagName: 'form',
+        class: options.css?.className?.value,
+        // attrs: {
+        //     novalidate: 'novalidate'
+        // },
+        children: parent => {
+            if(parent.children.length) {
+                return Array.from(parent.childNodes);
             }
 
-            field.errors.value = value;
+            return options.fields.map(field => fields[field]).concat(el({
+                tagName: 'button',
+                children: ['Subscribe']
+            }));
+        }
+    });
+
+    form.addEventListener('submit', (e) => {
+        form.classList.add('was-validated');
+
+        e.preventDefault();
+
+        submit(fieldComponents, {
+            key: options.key,
+            channel: options.channel,
+            source: options.source,
+            tags: options.tags,
+        })
+            .then(() => {
+                const svg = document.createElement('div');
+                
+                svg.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>';
+
+                form.parentElement?.replaceChild(el({
+                    tagName: 'div',
+                    class: options.css?.className.value,
+                    children: [
+                        el({
+                            tagName: 'div',
+                            class: 'flex items-center justify-center gap-2 p-4',
+                            children: [
+                                svg,
+                                'You have been subscribed!'
+                            ]
+                        }),
+                    ]
+                }), form);
+            })
+            .catch(e => handleValidationErrors(form, e));
+    });
+
+    const fieldComponents = Object.fromEntries(options.fields.map(field => {
+        const el = form.querySelector<HTMLFormElement>(
+            `input[name=${field}], textarea[name=${field}], select[name=${field}]`
+        );
+
+        if(!el) {
+            throw Error(`The "${field}" field cannot be found in the form`);
         }
 
-        return errors;
-    }
+        return [field, fieldComponent(el)];
+    }));
 
-    public field(key: string) {
-        return this.fields.find(({ name }) => name === key);
+    if(!form.parentElement) {
+        src?.append(form);
     }
 }
 
-export function subscribeForm(el: HTMLElement, options: SubscribeFormOptions) {
-    return new SubscribeForm(el, options);
+function handleValidationErrors(form: HTMLFormElement, e: SubmitError) {
+    const nodeIterator = document.createNodeIterator(form, NodeFilter.SHOW_COMMENT);
+                
+    while(nodeIterator.nextNode()) {
+        const commentNode = nodeIterator.referenceNode;
+        const matches = commentNode.textContent?.match(/FieldErrors\:(\w+)/);
+
+        if(!matches?.[1] || !commentNode.parentNode) {
+            continue;
+        }
+        
+        const fieldError = e.fieldErrors[matches[1]];
+
+        if(!fieldError) {
+            continue;
+        }
+        
+        const error = el({
+            el: commentNode.previousSibling,
+            tagName: 'div',
+            class: 'field-error',
+            children: fieldError
+        });
+        
+        commentNode.parentNode.insertBefore(error, commentNode);
+    }
+
+    form.querySelector<HTMLFormElement>(':invalid')?.focus();
+}
+
+export type FieldComponent = {
+    el: HTMLFormElement,
+    value: Ref<string>
+    errors: Ref<FieldErrors|undefined>
+}
+
+export function fieldComponent(el: HTMLFormElement): FieldComponent {
+    const value = ref<string>(el.value);
+    const errors = ref<FieldErrors>();
+
+    el.addEventListener('input', () => {
+        value.value = el.value;
+    });
+
+    watchEffect(() => {
+        if(errors.value?.length) {
+            // el.setCustomValidity(errors.value[0]);
+            el.classList.add('invalid');
+        }
+        else {
+            el.removeAttribute('invalid');
+            el.classList.remove('invalid');
+        }
+    });
+
+    return { el, value, errors };
+}
+
+export function formField<T extends 'input' | 'select' | 'textarea'>(options: ElementOptions<T> & {label?: string}): HTMLElement {
+    return el({
+        tagName: 'div',
+        class: 'form-field',
+        children: parent => {
+            return [
+                options.label && el({
+                    tagName: 'label',
+                    class: 'form-label',
+                    attrs: {
+                        for: options.attrs?.name,
+                    },
+                    children: [
+                        options.label,
+                        options.attrs?.required && '*'
+                    ]
+                }),
+                el({
+                    ...options,
+                    el: parent,
+                    class: 'form-control',
+                    attrs: {
+                        ...options.attrs,
+                        id: options.attrs?.name
+                    }
+                }),
+                options.attrs?.name && `<!-- FieldErrors:${options.attrs?.name} -->`
+            ];
+        }
+    });
+}
+
+export type FailedResponse = {
+    errors: Record<string,FieldErrors>,
+    messages: []
+};
+
+export type SubmitFormData = {
+    channel?: string;
+    key: string;
+    tags?: string[];
+    source?: string;
+} & Partial<Record<FieldAlias,string>>
+
+class SubmitError extends Error {
+    constructor(
+        public response: Response,
+        public fieldErrors: Record<string,FieldErrors>
+    ) {
+        super();
+    }
+}
+
+export async function submit(fieldComponents: Record<string,FieldComponent>, data: SubmitFormData) {
+    const response = await fetch(import.meta.env.VITE_APP_URL, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${data.key}`,
+        },
+        body: JSON.stringify({
+            ...Object.fromEntries(
+                Object.entries(fieldComponents)
+                    .map(([key, { value }]) => [key, value.value])
+            ),
+            ...data
+        })
+    });
+
+    if(response.status === 403) {
+        throw new Error('Invalid api key.');
+    }
+
+    if(response.ok) {
+        return response;
+    }
+    
+    const { errors }: FailedResponse = await response.json();
+
+    for(const [key, value] of Object.entries(errors)) {
+        if(!fieldComponents[key]) {
+            continue;
+        }
+
+        fieldComponents[key].errors.value = value;
+    }
+
+    throw new SubmitError(response, errors);
 }

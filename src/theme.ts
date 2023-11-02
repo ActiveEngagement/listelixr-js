@@ -21,7 +21,7 @@ function mergeCSSAttributes(target: CSSAttribute, source: CSSAttribute): CSSAttr
     return target;
 }
 
-export function theme(props: CSSAttribute): Theme {
+export function css(props: CSSAttribute): Theme {
     const css = ref(props);
 
     const className = computed(() => {
@@ -45,7 +45,7 @@ export function theme(props: CSSAttribute): Theme {
     return instance;
 }
 
-export const base = theme({
+export const base = css({
     '*, ::before, ::after': {
         boxSizing: 'border-box'
     },
@@ -147,7 +147,7 @@ export const base = theme({
     }
 });
 
-export const defaultTheme = theme({
+export const defaultTheme = css({
     ...base.css.value,
 
     fontFamily: 'system-ui, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\'',
@@ -230,5 +230,37 @@ export const defaultTheme = theme({
         '&:focus': {
             boxShadow: '0px 0px 0px 3px rgb(30, 78, 216, .5)',
         }
+    },
+
+    '.flex': {
+        display: 'flex'
+    },
+
+    '.flex-col': {
+        flexDirection: 'column'
+    },
+
+    '.items-center': {
+        alignItems: 'center'
+    },
+
+    '.justify-center': {
+        justifyContent: 'center'
+    },
+
+    '.p-4': {
+        padding: '1rem'
+    },
+
+    '.gap-2': {
+        gap: '.5rem'
+    },
+
+    '.w-6': {
+        width: '1.5rem'
+    },
+
+    '.w-h': {
+        width: '1.5rem'
     }
 });
