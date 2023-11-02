@@ -1,3 +1,10 @@
+# [1.0.0-beta.9](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2023-11-02)
+
+
+### Bug Fixes
+
+* server url not pointing to https ([93db1fe](https://github.com/ActiveEngagement/listelixr-js/commit/93db1fe190e17e37cd4dfdbed462391cb7515085))
+
 # [1.0.0-beta.8](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.7...v1.0.0-beta.8) (2023-11-02)
 
 
