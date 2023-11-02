@@ -1,3 +1,10 @@
+# [1.0.0-beta.10](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.9...v1.0.0-beta.10) (2023-11-02)
+
+
+### Bug Fixes
+
+* more css issues ([067f4a4](https://github.com/ActiveEngagement/listelixr-js/commit/067f4a4bc060491f6d2861d6e8b904a19d0267b6))
+
 # [1.0.0-beta.9](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2023-11-02)
 
 
