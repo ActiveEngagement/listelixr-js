@@ -260,7 +260,7 @@ export const defaultTheme = css({
         width: '1.5rem'
     },
 
-    '.w-h': {
+    '.h-6': {
         width: '1.5rem'
     }
 });

@@ -100,13 +100,12 @@ export type SubscribeFormOptions = {
 export type FieldErrors = string[];
 
 export function subscribeForm(src: Element | null, options: SubscribeFormOptions) {
+    const themeClassName = options.css?.className?.value ?? defaultTheme.className.value;
+
     const form = el({
         el: src,
         tagName: 'form',
-        class: options.css?.className?.value ?? defaultTheme.className.value,
-        // attrs: {
-        //     novalidate: 'novalidate'
-        // },
+        class: themeClassName,
         children: parent => {
             if(parent.children.length) {
                 return Array.from(parent.childNodes);
@@ -137,7 +136,7 @@ export function subscribeForm(src: Element | null, options: SubscribeFormOptions
 
                 form.parentElement?.replaceChild(el({
                     tagName: 'div',
-                    class: options.css?.className.value,
+                    class: themeClassName,
                     children: [
                         el({
                             tagName: 'div',
@@ -165,7 +164,7 @@ export function subscribeForm(src: Element | null, options: SubscribeFormOptions
         return [field, fieldComponent(el)];
     }));
 
-    if(!form.parentElement) {
+    if(!src?.contains(form)) {
         src?.append(form);
     }
 }
