@@ -1,3 +1,10 @@
+# [1.0.0-beta.6](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2023-11-02)
+
+
+### Bug Fixes
+
+* refactored so JS will hydrate an existing form ([fbbd5db](https://github.com/ActiveEngagement/listelixr-js/commit/fbbd5db215784d79d6c1a7bf73a0be67694089e8))
+
 # [1.0.0-beta.5](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2023-10-11)
 
 
