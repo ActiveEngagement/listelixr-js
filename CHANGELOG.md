@@ -1,3 +1,10 @@
+# [1.0.0-beta.8](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.7...v1.0.0-beta.8) (2023-11-02)
+
+
+### Bug Fixes
+
+* added default theme if no css has been passed. ([f6b781c](https://github.com/ActiveEngagement/listelixr-js/commit/f6b781c9dc0c70e9af3ecc079bf856d45f86004f))
+
 # [1.0.0-beta.7](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2023-11-02)
 
 
