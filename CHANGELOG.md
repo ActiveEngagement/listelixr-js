@@ -1,3 +1,10 @@
+# [1.0.0-beta.7](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2023-11-02)
+
+
+### Bug Fixes
+
+* issue with build outputting wrong file extensions ([5bd6022](https://github.com/ActiveEngagement/listelixr-js/commit/5bd60226e094dd55db7aabc52436418d805080ad))
+
 # [1.0.0-beta.6](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2023-11-02)
 
 
