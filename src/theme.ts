@@ -151,7 +151,7 @@ export const defaultTheme = css({
     ...base.css.value,
 
     // fontFamily: 'system-ui, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\'',
-    
+
     lineHeight: 1.15,
     '-webkit-text-size-adjust': '100%',
     '-moz-tab-size': 4,
@@ -234,7 +234,7 @@ export const defaultTheme = css({
     },
 
     '.flex': {
-        display: 'flex'
+        display: 'flex !important'
     },
 
     '.flex-col': {
@@ -242,26 +242,26 @@ export const defaultTheme = css({
     },
 
     '.items-center': {
-        alignItems: 'center'
+        alignItems: 'center !important'
     },
 
     '.justify-center': {
-        justifyContent: 'center'
+        justifyContent: 'center !important'
     },
 
     '.p-4': {
-        padding: '1rem'
+        padding: '1rem !important'
     },
 
     '.gap-2': {
-        gap: '.5rem'
+        gap: '.5rem !important'
     },
 
     '.w-6': {
-        width: '1.5rem'
+        width: '1.5rem !important'
     },
 
     '.h-6': {
-        width: '1.5rem'
+        width: '1.5rem !important'
     }
 });
