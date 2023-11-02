@@ -150,7 +150,8 @@ export const base = css({
 export const defaultTheme = css({
     ...base.css.value,
 
-    fontFamily: 'system-ui, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\'',
+    // fontFamily: 'system-ui, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\'',
+    
     lineHeight: 1.15,
     '-webkit-text-size-adjust': '100%',
     '-moz-tab-size': 4,
