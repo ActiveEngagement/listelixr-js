@@ -9,7 +9,7 @@ export default ({ command }) => defineConfig({
         lib: {
             entry: path.resolve(__dirname, 'src/index.ts'),
             name: 'ListElixr',
-            fileName: 'ListElixr',
+            fileName: (format) => `ListElixr.${format}.js`,
         }
     }
 });

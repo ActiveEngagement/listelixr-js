@@ -4,8 +4,8 @@
   "version": "1.0.0-beta.5",
   "type": "module",
   "types": "dist/index.d.ts",
-  "main": "dist/ListElixr.umd.cjs",
-  "module": "dist/ListElixr.js",
+  "main": "dist/ListElixr.umd.js",
+  "module": "dist/ListElixr.es.js",
   "files": [
     "dist"
   ],
