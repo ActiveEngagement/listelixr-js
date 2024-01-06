@@ -56,12 +56,6 @@ export const fields = {
             type: 'text',
         }
     }),
-    test: defineField('test', {
-        tagName: 'textarea',
-        label: 'Test',
-        attrs: {
-        }
-    })
 } as const satisfies Record<string, FieldDefinition>;
 
 /**
