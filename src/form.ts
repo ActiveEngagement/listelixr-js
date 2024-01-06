@@ -1,4 +1,4 @@
-import { ElementOptions, el } from './dom';
+import {ElementOptions, el, classes} from './dom';
 import { Ref, ref, watchEffect } from './signal';
 import { Theme, defaultTheme } from './theme';
 
@@ -332,7 +332,7 @@ export function formField(options: FormFieldOptions): HTMLElement {
                 el({
                     ...options,
                     el: parent,
-                    class: 'form-control',
+                    class: [classes(options.class), 'form-control'],
                     attrs: {
                         ...options.attrs,
                         id: options.attrs?.name
