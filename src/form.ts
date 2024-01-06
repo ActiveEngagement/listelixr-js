@@ -2,97 +2,92 @@ import { ElementOptions, el } from './dom';
 import { Ref, ref, watchEffect } from './signal';
 import { Theme, defaultTheme } from './theme';
 
-export const fields: Record<FieldAlias, () => Element> = {
-    email: () => formField({
-        tagName: 'input',
+type FieldDefinition = (custom: CustomFormFieldOptions) => HTMLElement;
+
+function defineField(name: string, options: CustomFormFieldOptions): FieldDefinition {
+    return (custom: CustomFormFieldOptions) => formField({
+        tagName: 'input',              // Seems like a sensible default.
+        ...options,
+        ...custom,
+        attrs: {
+            name,
+            id: name,
+            ...options.attrs,
+            ...custom.attrs
+        }
+    });
+}
+
+export const fields = {
+    email: defineField('email', {
         label: 'Email',
+        required: true,
         attrs: {
             type: 'email',
-            name: 'email',
-            id: 'email',
-            required: 'required',
             placeholder: 'you@example.com'
         }
     }),
-    first: () => formField({
-        tagName: 'input',
+    first: defineField('first', {
         label: 'First Name',
         attrs: {
             type: 'text',
-            name: 'first',
-            id: 'first',
         }
     }),
-    last: () => formField({
-        tagName: 'input',
+    last: defineField('last', {
         label: 'Last Name',
         attrs: {
             type: 'text',
-            name: 'last',
-            id: 'last',
         }
     }),
-    street: () => formField({
-        tagName: 'input',
+    street: defineField('street', {
         label: 'Street Address',
         attrs: {
             type: 'text',
-            name: 'street',
-            id: 'street',
         }
     }),
-    city: () => formField({
-        tagName: 'input',
+    city: defineField('city', {
         label: 'City',
         attrs: {
             type: 'text',
-            name: 'city',
-            id: 'city',
         }
     }),
-    state: () => formField({
-        tagName: 'input',
+    state: defineField('state', {
         label: 'State',
         attrs: {
             type: 'text',
-            name: 'state',
-            id: 'city',
         }
     }),
-    zip: () => formField({
-        tagName: 'input',
+    zip: defineField('zip', {
         label: 'Zipcode',
         attrs: {
             type: 'text',
-            name: 'zip',
-            id: 'zip',
         }
     }),
-    phone: () => formField({
-        tagName: 'input',
+    phone: defineField('phone', {
         label: 'Phone Number',
         attrs: {
             type: 'text',
-            name: 'phone',
-            id: 'phone',
+        }
+    }),
+    test: defineField('test', {
+        tagName: 'textarea',
+        label: 'Test',
+        attrs: {
         }
     })
-};
+} as const satisfies Record<string, FieldDefinition>;
 
-export type FieldAlias = 'first'
-    | 'last'
-    | 'email'
-    | 'street'
-    | 'state'
-    | 'city'
-    | 'zip'
-    | 'phone';
+export type FieldAlias = keyof typeof fields;
+
+export type FieldConfig = CustomFormFieldOptions & {
+    name: FieldAlias
+}
 
 export type SubscribeFormOptions = {
     key: string,
     css?: Theme,
     button?: string | [Record<string,string>] | [Record<string,string>, ChildNode | ChildNode[]]
-    fields: FieldAlias[],
+    fields: Array<FieldAlias|FieldConfig>,
     tags?: string[]
     source?: string
     channel?: string
@@ -101,6 +96,12 @@ export type FieldErrors = string[];
 
 export function subscribeForm(src: Element | null, options: SubscribeFormOptions) {
     const themeClassName = options.css?.className?.value ?? defaultTheme.className.value;
+
+    const evaluatedFields: FieldConfig[] = options.fields.map(field =>
+        typeof field === 'string'
+            ? { name: field }
+            : field
+    );
 
     const form = el({
         el: src,
@@ -111,10 +112,12 @@ export function subscribeForm(src: Element | null, options: SubscribeFormOptions
                 return Array.from(parent.childNodes);
             }
 
-            return options.fields.map(field => fields[field]()).concat(el({
-                tagName: 'button',
-                children: ['Subscribe']
-            }));
+            return evaluatedFields
+                .map(field => fields[field.name](field))
+                .concat(el({
+                    tagName: 'button',
+                    children: ['Subscribe']
+                }));
         }
     });
 
@@ -152,7 +155,7 @@ export function subscribeForm(src: Element | null, options: SubscribeFormOptions
             .catch(e => handleValidationErrors(form, e));
     });
 
-    const fieldComponents = Object.fromEntries(options.fields.map(field => {
+    const fieldComponents = Object.fromEntries(evaluatedFields.map(({ name: field }) => {
         const el = form.querySelector<HTMLFormElement>(
             `input[name=${field}], textarea[name=${field}], select[name=${field}]`
         );
@@ -227,8 +230,25 @@ export function fieldComponent(el: HTMLFormElement): FieldComponent {
     return { el, value, errors };
 }
 
-export function formField<T extends 'input' | 'select' | 'textarea'>(options: ElementOptions<T> & {label?: string}): HTMLElement {
-    return el({
+type FormElement = 'input' | 'select' | 'textarea';
+
+export type FormFieldOptions = ElementOptions<FormElement> & {
+    label?: string;
+    required?: boolean;
+};
+
+export type CustomFormFieldOptions = {
+    [Key in keyof FormFieldOptions]?: FormFieldOptions[Key]
+};
+
+export function formField(options: FormFieldOptions): HTMLElement {
+    options.attrs ||= {};
+
+    if (options.required === true) {
+        options.attrs.required = '';
+    }
+
+    return el<keyof HTMLElementTagNameMap>({
         tagName: 'div',
         class: 'form-field',
         children: parent => {
@@ -241,7 +261,7 @@ export function formField<T extends 'input' | 'select' | 'textarea'>(options: El
                     },
                     children: [
                         options.label,
-                        options.attrs?.required && '*'
+                        options.attrs?.required === '' && '*'
                     ]
                 }),
                 el({
