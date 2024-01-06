@@ -2,22 +2,9 @@ import { ElementOptions, el } from './dom';
 import { Ref, ref, watchEffect } from './signal';
 import { Theme, defaultTheme } from './theme';
 
-type FieldDefinition = (custom: CustomFormFieldOptions) => HTMLElement;
-
-function defineField(name: string, options: CustomFormFieldOptions): FieldDefinition {
-    return (custom: CustomFormFieldOptions) => formField({
-        tagName: 'input',              // Seems like a sensible default.
-        ...options,
-        ...custom,
-        attrs: {
-            name,
-            id: name,
-            ...options.attrs,
-            ...custom.attrs
-        }
-    });
-}
-
+/**
+ * A tuple of field definitions defining the fields available for use.
+ */
 export const fields = {
     email: defineField('email', {
         label: 'Email',
@@ -77,9 +64,56 @@ export const fields = {
     })
 } as const satisfies Record<string, FieldDefinition>;
 
-export type FieldAlias = keyof typeof fields;
+/**
+ * A field definition is simply a function that produces an HTML element capable of displaying the field, optionally
+ * with a set of overriden field options.
+ *
+ * @param custom field options to override
+ * @return the generated HTML element
+ */
+type FieldDefinition = (custom: CustomFormFieldOptions) => HTMLElement;
 
-export type FieldConfig = CustomFormFieldOptions & {
+/**
+ * Produces a typical field definition for the given field name and options.
+ *
+ * This function accomplishes two things:
+ *   1. It sets a few sensible defaults.
+ *   2. It automatically merges the default options with any custom options the user may provide.
+ *
+ * Note that unless "tagName" is specified explicitly, we'll default to "input," because, currently, every single one
+ * of our fields uses an input element.
+ *
+ * @param name the "name" of the field. "name" nad "id" will be set to this automatically.
+ * @param options the field options
+ * @return the generated field definition
+ */
+function defineField(name: string, options: CustomFormFieldOptions): FieldDefinition {
+    return (custom: CustomFormFieldOptions) => formField({
+        tagName: 'input',
+        ...options,
+        ...custom,
+        attrs: {
+            name,
+            id: name,
+            ...options.attrs,
+            ...custom.attrs
+        }
+    });
+}
+
+/**
+ * A union of all the available field names, which of course is just the keys of the fields tuple.
+ */
+type FieldAlias = keyof typeof fields;
+
+/**
+ * A type containing all the information necessary to auto-generate an HTML field. Tt contains the name
+ * of the field and optionally custom field options.
+ */
+type FieldSchema = CustomFormFieldOptions & {
+    /**
+     * A field alias indicating which type of default field to create.
+     */
     name: FieldAlias
 }
 
@@ -87,7 +121,13 @@ export type SubscribeFormOptions = {
     key: string,
     css?: Theme,
     button?: string | [Record<string,string>] | [Record<string,string>, ChildNode | ChildNode[]]
-    fields: Array<FieldAlias|FieldConfig>,
+
+    /**
+     * An array of fields to generate. Each field may be a simple string representing a field alias, or it may be a
+     * field schema object, to specify additional options.
+     */
+    fields: Array<FieldAlias|FieldSchema>,
+
     tags?: string[]
     source?: string
     channel?: string
@@ -97,7 +137,8 @@ export type FieldErrors = string[];
 export function subscribeForm(src: Element | null, options: SubscribeFormOptions) {
     const themeClassName = options.css?.className?.value ?? defaultTheme.className.value;
 
-    const evaluatedFields: FieldConfig[] = options.fields.map(field =>
+    // "Evaluate" the given fields by converting lone field aliases to skeleton field schema objects.
+    const evaluatedFields: FieldSchema[] = options.fields.map(field =>
         typeof field === 'string'
             ? { name: field }
             : field
@@ -230,24 +271,52 @@ export function fieldComponent(el: HTMLFormElement): FieldComponent {
     return { el, value, errors };
 }
 
-type FormElement = 'input' | 'select' | 'textarea';
+/**
+ * Represents the form elements available for use.
+ */
+export type FormElement = 'input' | 'select' | 'textarea';
 
+/**
+ * The options for creating an auto-generated field.
+ */
 export type FormFieldOptions = ElementOptions<FormElement> & {
     label?: string;
+
+    /**
+     * Indicates that the field should be required. In practice, this will result in `attrs.required` being set.
+     * This is therefore included as a shortcut.
+     */
     required?: boolean;
 };
 
+/**
+ * Options that may be specified to customize a field beyond the default options. Since customization is optional,
+ * this type is identical to `FormFieldOptions`, with every key being optional.
+ */
 export type CustomFormFieldOptions = {
     [Key in keyof FormFieldOptions]?: FormFieldOptions[Key]
 };
 
+/**
+ * Creates an HTML form field element with the given field options.
+ *
+ * NOTE that this function used to be generic. However, since it returns a generic `HTMLElement` object, the generic
+ * was unnecessary and made it much harder to do certain things with it.
+ *
+ * @param options the options with which to generate the element
+ */
 export function formField(options: FormFieldOptions): HTMLElement {
     options.attrs ||= {};
 
+    // The `required` option should result in a `required` attribute on the element.
+    // Note the empty string. `required` is one of those elements in HTML that is "value-less," like so:
+    //     <input type="text" required />
     if (options.required === true) {
         options.attrs.required = '';
     }
 
+    // Note that the generic doesn't really matter here, since we just need any old HTMLElement.
+    // I've chosen `keyof HTMLElementTagNameMap`, since it's the widest possible set.
     return el<keyof HTMLElementTagNameMap>({
         tagName: 'div',
         class: 'form-field',
@@ -261,6 +330,8 @@ export function formField(options: FormFieldOptions): HTMLElement {
                     },
                     children: [
                         options.label,
+                        // While it is tempting to check `options.required` instead, we check the attribute in case
+                        // the user bypassed `options.required` to set the attribute directly.
                         options.attrs?.required === '' && '*'
                     ]
                 }),
