@@ -34,6 +34,42 @@ The following are the standard fields:
 
 The order of the fields determine the order they appear in the form. Should you need to provide custom html structure for the fields, you may also pass an `HTMLElement` that contains an input field with one of the accepted field names.
 
+## Customizing Fields
+
+Fields may be customized by passing an object instead of a string.
+
+In the following example, the `last` field will be required, and the `email` field will have a class `.important` and a
+`data` HTML attribute:
+
+```html
+<script>
+    var el = document.querySelector('#foo');
+    var key = 'the-access-token-goes-here';
+
+    ListElixr.subscribeForm(el, {
+        key: key,
+        tags: ['foo', 'bar'], // optional
+        source: 'XXXXX', // optional
+        channel: 'YYYYY', // optional
+        fields: [
+            {
+                name: 'email',
+                class: 'important',
+                attrs: {
+                    data: 'Hello, world!'
+                }
+            },
+            'first',
+            {
+                name: 'last',
+                required: true
+            }
+        ]
+    });
+</script>
+
+```
+
 ## Customizeable Themes
 
 The following will extend the default theme. You could create an entirely new theme from scratch, but this example just shows how to override the submit button color.
