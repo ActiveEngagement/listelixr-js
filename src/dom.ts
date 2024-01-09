@@ -176,3 +176,46 @@ export function style(value: HTMLStyleAttribute): string {
         return `${key}:${value}`;
     }).join(';');
 }
+
+/**
+ * Gets the perceived value of an HTML "boolean attribute" from an object of attributes.
+ *
+ * HTML boolean attributes are those that represent a "true" or "false" value. Unfortunately, HTML is a bit funny with
+ * these. Essentially, if the element contains the attribute (**no matter the value**), then it is "on" or "true."
+ * If the element does not contain the attribute, then it is "off" or "false."
+ *
+ * This can produce some counterintuitive behavior. For instance, a `<input required="false" />` is required, as is
+ * a `<input required=0>`. The only case in which the input is not required is a simple `<input />`, without the
+ * required attribute at all.
+ *
+ * Therefore, the only values that correspond to a "false attribute" are `null` and `undefined`. Anything else is
+ * considered true.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Glossary/Boolean/HTML
+ */
+export function booleanAttrValue(attrs: Record<string, unknown>|undefined|null, attrName: string): boolean
+{
+    return !!attrs && attrName in attrs && attrs[attrName] !== null && attrs[attrName] !== undefined;
+}
+
+/**
+ * Sets the perceived value of an HTML "boolean attribute" on an object of attributes.
+ *
+ * HTML boolean attributes are those that represent a "true" or "false" value. Unfortunately, HTML is a bit funny with
+ * these. Essentially, if the element contains the attribute (**no matter the value**), then it is "on" or "true."
+ * If the element does not contain the attribute, then it is "off" or "false."
+ *
+ * This can produce some counterintuitive behavior. For instance, a `<input required="false" />` is required, as is
+ * a `<input required=0>`. The only case in which the input is not required is a simple `<input />`, without the
+ * required attribute at all.
+ *
+ * Therefore, we set an empty string for a "true attribute," which results in an element like `<input required>`, and
+ * we set undefined for a "false attribute," which (in our DOM functions at least) results in the attribute being
+ * removed.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Glossary/Boolean/HTML
+ */
+export function setBooleanAttrValue(attrs: Record<string, unknown>, attrName: string, value: boolean)
+{
+    attrs[attrName] = value ? '' : undefined;
+}

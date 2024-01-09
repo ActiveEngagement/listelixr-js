@@ -1,4 +1,4 @@
-import {ElementOptions, el, classes} from './dom';
+import {ElementOptions, el, classes, booleanAttrValue, setBooleanAttrValue} from './dom';
 import { Ref, ref, watchEffect } from './signal';
 import { Theme, defaultTheme } from './theme';
 
@@ -306,7 +306,7 @@ export function formField(options: FormFieldOptions): HTMLElement {
     // Note the empty string. `required` is one of those elements in HTML that is "value-less," like so:
     //     <input type="text" required />
     if (options.required === true) {
-        options.attrs.required = '';
+        setBooleanAttrValue(options.attrs, 'required', true);
     }
 
     // Note that the generic doesn't really matter here, since we just need any old HTMLElement.
@@ -326,7 +326,7 @@ export function formField(options: FormFieldOptions): HTMLElement {
                         options.label,
                         // While it is tempting to check `options.required` instead, we check the attribute in case
                         // the user bypassed `options.required` to set the attribute directly.
-                        options.attrs?.required === '' && '*'
+                        booleanAttrValue(options.attrs, 'required') && '*'
                     ]
                 }),
                 el({
