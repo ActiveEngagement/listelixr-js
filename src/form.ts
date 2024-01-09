@@ -1,98 +1,127 @@
-import { ElementOptions, el } from './dom';
+import {ElementOptions, el, classes, booleanAttrValue, setBooleanAttrValue} from './dom';
 import { Ref, ref, watchEffect } from './signal';
 import { Theme, defaultTheme } from './theme';
 
-export const fields: Record<FieldAlias, () => Element> = {
-    email: () => formField({
-        tagName: 'input',
+/**
+ * A tuple of field definitions defining the fields available for use.
+ */
+export const fields = {
+    email: useFormField('email', {
         label: 'Email',
+        required: true,
         attrs: {
             type: 'email',
-            name: 'email',
-            id: 'email',
-            required: 'required',
             placeholder: 'you@example.com'
         }
     }),
-    first: () => formField({
-        tagName: 'input',
+    first: useFormField('first', {
         label: 'First Name',
         attrs: {
             type: 'text',
-            name: 'first',
-            id: 'first',
         }
     }),
-    last: () => formField({
-        tagName: 'input',
+    last: useFormField('last', {
         label: 'Last Name',
         attrs: {
             type: 'text',
-            name: 'last',
-            id: 'last',
         }
     }),
-    street: () => formField({
-        tagName: 'input',
+    street: useFormField('street', {
         label: 'Street Address',
         attrs: {
             type: 'text',
-            name: 'street',
-            id: 'street',
         }
     }),
-    city: () => formField({
-        tagName: 'input',
+    city: useFormField('city', {
         label: 'City',
         attrs: {
             type: 'text',
-            name: 'city',
-            id: 'city',
         }
     }),
-    state: () => formField({
-        tagName: 'input',
+    state: useFormField('state', {
         label: 'State',
         attrs: {
             type: 'text',
-            name: 'state',
-            id: 'city',
         }
     }),
-    zip: () => formField({
-        tagName: 'input',
+    zip: useFormField('zip', {
         label: 'Zipcode',
         attrs: {
             type: 'text',
-            name: 'zip',
-            id: 'zip',
         }
     }),
-    phone: () => formField({
-        tagName: 'input',
+    phone: useFormField('phone', {
         label: 'Phone Number',
         attrs: {
             type: 'text',
-            name: 'phone',
-            id: 'phone',
         }
-    })
-};
+    }),
+} as const satisfies Record<string, FieldDefinition>;
 
-export type FieldAlias = 'first'
-    | 'last'
-    | 'email'
-    | 'street'
-    | 'state'
-    | 'city'
-    | 'zip'
-    | 'phone';
+/**
+ * A field definition is simply a function that produces an HTML element capable of displaying the field, optionally
+ * with a set of overriden field options.
+ *
+ * @param custom field options to override
+ * @return the generated HTML element
+ */
+type FieldDefinition = (custom: CustomFormFieldOptions) => HTMLElement;
+
+/**
+ * Produces a typical field definition for the given field name and options.
+ *
+ * This function accomplishes two things:
+ *   1. It sets a few sensible defaults.
+ *   2. It automatically merges the default options with any custom options the user may provide.
+ *
+ * Note that unless "tagName" is specified explicitly, we'll default to "input," because, currently, every single one
+ * of our fields uses an input element.
+ *
+ * @param name the "name" of the field. "name" nad "id" will be set to this automatically.
+ * @param options the field options
+ * @return the generated field definition
+ */
+function useFormField(name: string, options: CustomFormFieldOptions): FieldDefinition {
+    return (custom: CustomFormFieldOptions) => formField({
+        tagName: 'input',
+        ...options,
+        ...custom,
+        attrs: {
+            name,
+            id: name,
+            ...options.attrs,
+            ...custom.attrs
+        }
+    });
+}
+
+/**
+ * A union of all the available field names, which of course is just the keys of the fields tuple.
+ */
+type FieldAlias = keyof typeof fields;
+
+/**
+ * A type containing all the information necessary to auto-generate an HTML field. Tt contains the name
+ * of the field and optionally custom field options.
+ */
+type FieldSchema = CustomFormFieldOptions & {
+    /**
+     * A field alias indicating which type of default field to create.
+     */
+    name: FieldAlias
+}
 
 export type SubscribeFormOptions = {
     key: string,
     css?: Theme,
     button?: string | [Record<string,string>] | [Record<string,string>, ChildNode | ChildNode[]]
-    fields: FieldAlias[],
+
+    /**
+     * An array of fields to generate. Each field may be a simple string representing a field alias, or it may be a
+     * field schema object, to specify additional options.
+     */
+    fields: Array<FieldAlias|FieldSchema>,
+
     tags?: string[]
     source?: string
     channel?: string
@@ -101,6 +130,13 @@ export type FieldErrors = string[];
 
 export function subscribeForm(src: Element | null, options: SubscribeFormOptions) {
     const themeClassName = options.css?.className?.value ?? defaultTheme.className.value;
+
+    // "Evaluate" the given fields by converting lone field aliases to skeleton field schema objects.
+    const evaluatedFields: FieldSchema[] = options.fields.map(field =>
+        typeof field === 'string'
+            ? { name: field }
+            : field
+    );
 
     const form = el({
         el: src,
@@ -111,10 +147,12 @@ export function subscribeForm(src: Element | null, options: SubscribeFormOptions
                 return Array.from(parent.childNodes);
             }
 
-            return options.fields.map(field => fields[field]()).concat(el({
-                tagName: 'button',
-                children: ['Subscribe']
-            }));
+            return evaluatedFields
+                .map(field => fields[field.name](field))
+                .concat(el({
+                    tagName: 'button',
+                    children: ['Subscribe']
+                }));
         }
     });
 
@@ -152,7 +190,7 @@ export function subscribeForm(src: Element | null, options: SubscribeFormOptions
             .catch(e => handleValidationErrors(form, e));
     });
 
-    const fieldComponents = Object.fromEntries(options.fields.map(field => {
+    const fieldComponents = Object.fromEntries(evaluatedFields.map(({ name: field }) => {
         const el = form.querySelector<HTMLFormElement>(
             `input[name=${field}], textarea[name=${field}], select[name=${field}]`
         );
@@ -227,7 +265,48 @@ export function fieldComponent(el: HTMLFormElement): FieldComponent {
     return { el, value, errors };
 }
 
-export function formField<T extends 'input' | 'select' | 'textarea'>(options: ElementOptions<T> & {label?: string}): HTMLElement {
+/**
+ * Represents the form elements available for use.
+ */
+export type FormElement = 'input' | 'select' | 'textarea';
+
+/**
+ * The options for creating an auto-generated field.
+ */
+export type FormFieldOptions = ElementOptions<FormElement> & {
+    label?: string;
+
+    /**
+     * Indicates that the field should be required. In practice, this will result in `attrs.required` being set.
+     * This is therefore included as a shortcut.
+     */
+    required?: boolean;
+};
+
+/**
+ * Options that may be specified to customize a field beyond the default options. Since customization is optional,
+ * this type is identical to `FormFieldOptions`, with every key being optional.
+ */
+export type CustomFormFieldOptions = {
+    [Key in keyof FormFieldOptions]?: FormFieldOptions[Key]
+};
+
+/**
+ * Creates an HTML form field element with the given field options.
+ *
+ * NOTE that this function used to be generic. However, since it returns a generic `HTMLElement` object, the generic
+ * was unnecessary and made it much harder to do certain things with it.
+ *
+ * @param options the options with which to generate the element
+ */
+export function formField(options: FormFieldOptions): HTMLElement {
+    options.attrs ||= {};
+
+    // The `required` option should result in a `required` attribute on the element.
+    if (options.required === true) {
+        setBooleanAttrValue(options.attrs, 'required', true);
+    }
+
     return el({
         tagName: 'div',
         class: 'form-field',
@@ -241,13 +320,15 @@ export function formField<T extends 'input' | 'select' | 'textarea'>(options: El
                     },
                     children: [
                         options.label,
-                        options.attrs?.required && '*'
+                        // While it is tempting to check `options.required` instead, we check the attribute in case
+                        // the user bypassed `options.required` to set the attribute directly.
+                        booleanAttrValue(options.attrs, 'required') && '*'
                     ]
                 }),
                 el({
                     ...options,
                     el: parent,
-                    class: 'form-control',
+                    class: [classes(options.class), 'form-control'],
                     attrs: {
                         ...options.attrs,
                         id: options.attrs?.name
