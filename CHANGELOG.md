@@ -1,3 +1,10 @@
+# [1.0.0-beta.15](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.14...v1.0.0-beta.15) (2024-01-09)
+
+
+### Bug Fixes
+
+* fix .tsconfig ([f908e91](https://github.com/ActiveEngagement/listelixr-js/commit/f908e9122bf34db50801a44e7977b5756640af40))
+
 # [1.0.0-beta.14](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.13...v1.0.0-beta.14) (2024-01-09)
 
 
