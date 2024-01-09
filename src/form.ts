@@ -303,15 +303,11 @@ export function formField(options: FormFieldOptions): HTMLElement {
     options.attrs ||= {};
 
     // The `required` option should result in a `required` attribute on the element.
-    // Note the empty string. `required` is one of those elements in HTML that is "value-less," like so:
-    //     <input type="text" required />
     if (options.required === true) {
         setBooleanAttrValue(options.attrs, 'required', true);
     }
 
-    // Note that the generic doesn't really matter here, since we just need any old HTMLElement.
-    // I've chosen `keyof HTMLElementTagNameMap`, since it's the widest possible set.
-    return el<keyof HTMLElementTagNameMap>({
+    return el({
         tagName: 'div',
         class: 'form-field',
         children: parent => {
