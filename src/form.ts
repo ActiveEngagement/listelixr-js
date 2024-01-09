@@ -6,7 +6,7 @@ import { Theme, defaultTheme } from './theme';
  * A tuple of field definitions defining the fields available for use.
  */
 export const fields = {
-    email: defineField('email', {
+    email: useFormField('email', {
         label: 'Email',
         required: true,
         attrs: {
@@ -14,43 +14,43 @@ export const fields = {
             placeholder: 'you@example.com'
         }
     }),
-    first: defineField('first', {
+    first: useFormField('first', {
         label: 'First Name',
         attrs: {
             type: 'text',
         }
     }),
-    last: defineField('last', {
+    last: useFormField('last', {
         label: 'Last Name',
         attrs: {
             type: 'text',
         }
     }),
-    street: defineField('street', {
+    street: useFormField('street', {
         label: 'Street Address',
         attrs: {
             type: 'text',
         }
     }),
-    city: defineField('city', {
+    city: useFormField('city', {
         label: 'City',
         attrs: {
             type: 'text',
         }
     }),
-    state: defineField('state', {
+    state: useFormField('state', {
         label: 'State',
         attrs: {
             type: 'text',
         }
     }),
-    zip: defineField('zip', {
+    zip: useFormField('zip', {
         label: 'Zipcode',
         attrs: {
             type: 'text',
         }
     }),
-    phone: defineField('phone', {
+    phone: useFormField('phone', {
         label: 'Phone Number',
         attrs: {
             type: 'text',
@@ -81,7 +81,7 @@ type FieldDefinition = (custom: CustomFormFieldOptions) => HTMLElement;
  * @param options the field options
  * @return the generated field definition
  */
-function defineField(name: string, options: CustomFormFieldOptions): FieldDefinition {
+function useFormField(name: string, options: CustomFormFieldOptions): FieldDefinition {
     return (custom: CustomFormFieldOptions) => formField({
         tagName: 'input',
         ...options,
