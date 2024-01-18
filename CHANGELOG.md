@@ -1,3 +1,10 @@
+# [1.0.0-beta.16](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.15...v1.0.0-beta.16) (2024-01-18)
+
+
+### Bug Fixes
+
+* missing Accept header ([ecf5a45](https://github.com/ActiveEngagement/listelixr-js/commit/ecf5a45eeeb53381ccef6a478de810e89872d581))
+
 # [1.0.0-beta.15](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.14...v1.0.0-beta.15) (2024-01-09)
 
 
