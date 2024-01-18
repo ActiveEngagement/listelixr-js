@@ -367,6 +367,7 @@ export async function submit(fieldComponents: Record<string,FieldComponent>, dat
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': `Bearer ${data.key}`,
         },
         body: JSON.stringify({
