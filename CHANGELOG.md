@@ -1,3 +1,15 @@
+# [1.0.0-beta.17](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.16...v1.0.0-beta.17) (2024-11-04)
+
+
+### Bug Fixes
+
+* updated pnpm packages ([4e897c7](https://github.com/ActiveEngagement/listelixr-js/commit/4e897c77ea1188fc13a84758de8f12672e6e1506))
+
+
+### Features
+
+* added prefs form and rewrote library with solid.js ([9541d97](https://github.com/ActiveEngagement/listelixr-js/commit/9541d974ebeff82880853893ae872d13d742d9e3))
+
 # [1.0.0-beta.16](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.15...v1.0.0-beta.16) (2024-01-18)
 
 
