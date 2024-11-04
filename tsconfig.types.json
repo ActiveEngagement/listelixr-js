@@ -1,10 +1,11 @@
 {
     "compilerOptions": {
+      "jsx": "preserve",
+      "jsxImportSource": "solid-js",
       "target": "ESNext",
       "module": "ESNext",
-      "moduleResolution": "Bundler",
+      "moduleResolution": "bundler",
       "importHelpers": true,
-      "jsx": "preserve",
       "esModuleInterop": true,
       "resolveJsonModule": true,
       "sourceMap": true,

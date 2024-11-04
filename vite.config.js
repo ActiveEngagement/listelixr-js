@@ -1,8 +1,12 @@
 import browserslistToEsbuild from 'browserslist-to-esbuild';
 import path from 'path';
 import { defineConfig } from 'vite';
+import solidPlugin from 'vite-plugin-solid';
 
 export default ({ command }) => defineConfig({
+    plugins: [
+        solidPlugin(),
+    ],
     build: {
         target: browserslistToEsbuild(),
         sourcemap: command === 'build',

@@ -1,10 +1,11 @@
-import { CSSAttribute, css as api } from 'goober';
-import { Ref, computed, ref } from './signal';
+import { css as api, type CSSAttribute } from 'goober';
+import { createSignal } from 'solid-js';
 
 export type Theme = {
-    css: Ref<CSSAttribute>,
-    className: Ref<string>,
-    merge: (...args: CSSAttribute[]) => Theme
+    className: () => string;
+    css: () => CSSAttribute;
+    merge: (...args: CSSAttribute[]) => Theme;
+    extend: (...args: CSSAttribute[]) => Theme;
 }
 
 function mergeCSSAttributes(target: CSSAttribute, source: CSSAttribute): CSSAttribute {
@@ -18,34 +19,55 @@ function mergeCSSAttributes(target: CSSAttribute, source: CSSAttribute): CSSAttr
             target[key] = source[key];
         }
     }
+    
     return target;
 }
+export function theme(attrs: CSSAttribute): Theme {
+    const [ css, setCss ] = createSignal<CSSAttribute>(attrs);
 
-export function css(props: CSSAttribute): Theme {
-    const css = ref(props);
-
-    const className = computed(() => {
-        return api(css.value);
-    });
-
-    function merge(...args: CSSAttribute[]) {
-        for(const arg of args) {
-            css.value = mergeCSSAttributes(css.value, arg);
-        }
-
-        return instance;
+    function className() {
+        return api(css());
     }
 
-    const instance = {
-        css,
-        className,
-        merge
-    };
+    function merge(...attrs: CSSAttribute[]) {
+        const target = JSON.parse(JSON.stringify(css()));
 
-    return instance;
+        for(const attr of attrs) {
+            mergeCSSAttributes(target, attr);
+        }
+
+        setCss(target);
+        // setClassName(api(css()));
+
+        return {
+            className,
+            css,
+            merge,
+            extend
+        };
+    }
+
+    function extend(...attrs: CSSAttribute[]) {
+        const target = JSON.parse(JSON.stringify(css()));
+
+        for(const attr of attrs) {
+            mergeCSSAttributes(target, attr);
+        }
+
+        return theme(target);
+    }
+
+    return {
+        className,
+        css,
+        merge,
+        extend
+    };
 }
 
-export const base = css({
+export const base = theme({
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+
     '*, ::before, ::after': {
         boxSizing: 'border-box'
     },
@@ -147,18 +169,49 @@ export const base = css({
     }
 });
 
-export const defaultTheme = css({
-    ...base.css.value,
-
-    // fontFamily: 'system-ui, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\'',
-
+export const defaultTheme = base.extend({
     lineHeight: 1.15,
     '-webkit-text-size-adjust': '100%',
     '-moz-tab-size': 4,
     tabSize: 4,
     display: 'flex',
     flexDirection: 'column',
-    gap: '.75rem',
+    gap: '1rem',
+
+    '.form-error-message': {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '.5rem',
+        backgroundColor: '#dc262615',
+        borderLeft: '.333rem #dc2626 solid',
+        padding: '.666rem 1rem',
+    },
+    
+    '.form-success-message': {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '.5rem',
+        backgroundColor: '#05966915',
+        borderLeft: '.333rem #059669 solid',
+        padding: '.666rem 1rem',
+    },
+
+    '.form-heading': {
+        fontSize: '1.5rem',
+        fontWeight: 'bold',
+    },
+
+    '.form-fields': {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+    },
+
+    '.form-field-group': {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '.25rem'
+    },
 
     '.form-field': {
         display: 'flex',
@@ -169,15 +222,24 @@ export const defaultTheme = css({
             '.form-label': {
                 color: '#dc2626',
             },
+
             '.form-control': {
+                color: '#dc2626',
                 borderColor: '#dc2626',
 
                 '&:focus': {
                     boxShadow: '0px 0px 0px 3px rgb(220, 38, 38, .5)'
+                },
+
+                '&[type=checkbox],&[type=radio]': {
+                    borderColor: '#dc2626',
+
+                    '&:checked': {
+                        backgroundColor: '#dc2626'
+                    }
                 }
             }
         }
-
     },
 
     '.field-error': {
@@ -189,18 +251,50 @@ export const defaultTheme = css({
         display: 'block',
         fontSize: '.9rem',
         color: '#27272a',
+
+        '&:has([type="checkbox"],[type="radio"])': {
+            display: 'flex',
+            alignItems: 'center',
+            gap: '.25rem',
+        }
     },
 
     '.form-control': {
         border: '1px solid #e0e0e0',
-        display: 'block',
-        width: '100%',
         padding: '.25rem .5rem',
         borderRadius: '.25rem',
         outline: 'none',
         fontSize: '1rem',
         lineHeight: '1.5rem',
         color: '#27272a',
+
+        '&[type=checkbox], &[type=radio]': {
+            display: 'inline-flex',
+            appearance: 'none',
+            height: '1rem',
+            width: '1rem',
+            padding: '0',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundSize: 'contain',
+
+            '&:checked': {
+                borderColor: '#3b82f6',
+                backgroundColor: '#3b82f6',
+            }
+        },
+
+        '&[type=checkbox]:checked': {
+            backgroundImage: 'url("data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 20 20\'><path fill=\'none\' stroke=\'white\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'3\' d=\'M6 10l3 3l6-6\'/></svg>")'
+        },
+
+        '&[type=radio]': {
+            borderRadius: '100%',
+
+            '&:checked': {
+                backgroundImage: 'url("data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'-4 -4 8 8\'><circle r=\'2\' fill=\'white\'/></svg>")'
+            },
+        },
 
         '&:focus': {
             borderColor: '#3b82f6',
@@ -213,8 +307,9 @@ export const defaultTheme = css({
     },
 
     'button': {
+        display: 'inline-flex',
         background: '#2563eb',
-        padding: '.5rem .25rem',
+        padding: '.5rem .75rem',
         border: 'none',
         borderStyle: 'none',
         color: 'white',
@@ -224,6 +319,10 @@ export const defaultTheme = css({
         fontSize: '1.05rem',
         lineHeight: '1.25rem',
 
+        '&:disabled': {
+            background: '#2563eb50',
+        },
+
         '&:active': {
             background: '#1d4ed8'
         },
@@ -231,37 +330,5 @@ export const defaultTheme = css({
         '&:focus': {
             boxShadow: '0px 0px 0px 3px rgb(30, 78, 216, .5)',
         }
-    },
-
-    '.flex': {
-        display: 'flex !important'
-    },
-
-    '.flex-col': {
-        flexDirection: 'column'
-    },
-
-    '.items-center': {
-        alignItems: 'center !important'
-    },
-
-    '.justify-center': {
-        justifyContent: 'center !important'
-    },
-
-    '.p-4': {
-        padding: '1rem !important'
-    },
-
-    '.gap-2': {
-        gap: '.5rem !important'
-    },
-
-    '.w-6': {
-        width: '1.5rem !important'
-    },
-
-    '.h-6': {
-        width: '1.5rem !important'
     }
 });

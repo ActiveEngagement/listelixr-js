@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && tsc --emitDeclarationOnly --project tsconfig.types.json",
+    "build": "vite build && tsc --emitDeclarationOnly --project tsconfig.types.json",
     "preview": "vite preview"
   },
   "browserslist": {
@@ -22,20 +22,22 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "^17.7.0",
+    "@commitlint/config-conventional": "^17.8.1",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
-    "@semantic-release/npm": "^10.0.4",
-    "@vue-interface/eslint-config": "^1.0.0-beta.4",
+    "@semantic-release/npm": "^10.0.6",
+    "@vue-interface/eslint-config": "1.0.0-beta.4",
     "browserslist-to-esbuild": "^1.2.0",
-    "commitlint": "^17.7.1",
-    "dotenv": "^16.3.1",
+    "commitlint": "^17.8.1",
+    "dotenv": "^16.4.5",
     "husky": "^8.0.3",
-    "semantic-release": "^21.0.7",
-    "typescript": "^5.0.2",
-    "vite": "^4.4.5"
+    "semantic-release": "^21.1.2",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "vite-plugin-solid": "^2.10.2"
   },
   "dependencies": {
-    "goober": "^2.1.13"
+    "goober": "^2.1.16",
+    "solid-js": "^1.9.3"
   }
 }
