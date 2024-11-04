@@ -78,6 +78,26 @@ The following are the standard fields:
 
 *The order of the fields determines the order they appear in the form.*
 
+### Required Fields
+
+You may also mark the following fields as required:
+
+ `first`, `last`, `street`, `city`, `state`, `zip`, `phone`.
+
+```js
+<script>
+const el = document.querySelector('#foo');
+
+ListElixr.subscribeForm(el, {
+    key: 'the-access-token-goes-here',
+    fields: ['email', 'first', 'last'],
+    requiredFields: ['first', 'last']
+});
+</script>
+```
+
+*Email is always required.*
+
 ## Preference Forms
 
 Preference forms allow existing subscribers to manage their subscriptions for various lists.
