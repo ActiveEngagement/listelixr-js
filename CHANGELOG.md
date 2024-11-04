@@ -1,3 +1,10 @@
+# [1.0.0-beta.18](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.17...v1.0.0-beta.18) (2024-11-04)
+
+
+### Bug Fixes
+
+* added required fields and updated api endpoint url ([4271a5f](https://github.com/ActiveEngagement/listelixr-js/commit/4271a5f80c0ae8b5ec26c99e18cde0acd553286b))
+
 # [1.0.0-beta.17](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.16...v1.0.0-beta.17) (2024-11-04)
 
 
