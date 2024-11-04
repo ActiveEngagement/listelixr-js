@@ -1,3 +1,41 @@
+# [1.0.0-beta.16](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.15...v1.0.0-beta.16) (2024-01-18)
+
+
+### Bug Fixes
+
+* missing Accept header ([ecf5a45](https://github.com/ActiveEngagement/listelixr-js/commit/ecf5a45eeeb53381ccef6a478de810e89872d581))
+
+# [1.0.0-beta.15](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.14...v1.0.0-beta.15) (2024-01-09)
+
+
+### Bug Fixes
+
+* fix .tsconfig ([f908e91](https://github.com/ActiveEngagement/listelixr-js/commit/f908e9122bf34db50801a44e7977b5756640af40))
+
+# [1.0.0-beta.14](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.13...v1.0.0-beta.14) (2024-01-09)
+
+
+### Bug Fixes
+
+* merge classes properly ([3ef7cab](https://github.com/ActiveEngagement/listelixr-js/commit/3ef7cab5e3c0a1b6fd4e890fed42ac0c25f6ba4f))
+
+
+### Features
+
+* documentation ([915bb24](https://github.com/ActiveEngagement/listelixr-js/commit/915bb24fb9fa37ac57d70d9538ac8ad21970882c))
+* enhance treatment of the required attribute ([1fbe0c5](https://github.com/ActiveEngagement/listelixr-js/commit/1fbe0c52b6499091147220db04b31486b511424d))
+* make fields customizable ([da89505](https://github.com/ActiveEngagement/listelixr-js/commit/da89505fdc6efa4b421fa04f3fddc34d31a8bf4a))
+* remove old comments ([b6f0a11](https://github.com/ActiveEngagement/listelixr-js/commit/b6f0a11333c8293b6b086bf1a8879ec744aef102))
+* remove test field ([53f725f](https://github.com/ActiveEngagement/listelixr-js/commit/53f725fee689b1fd5e4a389df7f999137f28c8c8))
+* rename `defineField()` to `useFormField()` ([cca56fc](https://github.com/ActiveEngagement/listelixr-js/commit/cca56fceb6a474f09e343015d1f6e5baa134ee9f))
+
+# [1.0.0-beta.13](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.12...v1.0.0-beta.13) (2023-11-02)
+
+
+### Bug Fixes
+
+* issue with memory reference ([e371e90](https://github.com/ActiveEngagement/listelixr-js/commit/e371e90d376d1cb1fddb360f75dbaf21a349c2ba))
+
 # [1.0.0-beta.12](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2023-11-02)
 
 
