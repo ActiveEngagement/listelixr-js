@@ -1,3 +1,10 @@
+# [1.0.0-beta.20](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.19...v1.0.0-beta.20) (2024-11-04)
+
+
+### Bug Fixes
+
+* improved error handling and loading indicator ([dc3a73b](https://github.com/ActiveEngagement/listelixr-js/commit/dc3a73bc99b29b143329bc7f50d099753dbe52be))
+
 # [1.0.0-beta.19](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.18...v1.0.0-beta.19) (2024-11-04)
 
 
