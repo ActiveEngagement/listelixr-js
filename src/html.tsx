@@ -1,7 +1,10 @@
 import { For, Show, splitProps } from 'solid-js';
 
-export type ValidationErrors = {
-    message: string;
+export type HttpError = {
+    message: string
+}
+
+export type ValidationErrors = HttpError & {
     errors?: Record<string, string[]>;
 }
 
@@ -96,7 +99,9 @@ export function InputField(props: FormControlProps) {
 export function ActivityIndicator() {
     return (
         <>
-            <div>Loading...</div>
+            <span class="activity-indicator">
+                <span class="activity-indicator-label">Loading...</span>
+            </span>
         </>
     );
 }

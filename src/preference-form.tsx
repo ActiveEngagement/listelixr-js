@@ -1,7 +1,7 @@
 import { createEffect, createResource, createSignal, For, Match, Show, Switch } from 'solid-js';
 import { createStore } from 'solid-js/store';
 import { render, type MountableElement } from 'solid-js/web';
-import { ActivityIndicator, CheckboxField, InputField, RadioField, type ValidationErrors } from './html';
+import { ActivityIndicator, CheckboxField, InputField, RadioField, type HttpError, type ValidationErrors } from './html';
 import type { Theme } from './theme';
 
 export type Field = {
@@ -42,11 +42,12 @@ function PreferenceForm(options: PreferenceFormOptions) {
         'Content-Type': 'application/json',
     };
 
+    const [form, setForm] = createSignal<PreferenceForm>();
     const [submitting, setSubmitting] = createSignal(false);
     const [error, setError] = createSignal<ValidationErrors>();
     const [fieldType, setFieldType] = createSignal<'radio'|'checkbox'>();
 
-    const [ resource ] = createResource<PreferenceForm>(async () => {
+    const [ resource ] = createResource<PreferenceForm|HttpError>(async () => {
         const url = new URL(endpoint);
     
         if(params.email) {
@@ -68,17 +69,30 @@ function PreferenceForm(options: PreferenceFormOptions) {
     });
 
     createEffect(() => {
-        setFieldType(resource()?.form.rows.flat(1).find(({ type }) => type === 'toggle_single') ? 'checkbox' : 'radio');
+        const data = resource();
+
+        if(!data) {
+            return;
+        }
+
+        if('message' in data) {
+            setError(data);
+
+            return;
+        }
+
+        setForm(data);
+        setFieldType(data.form.rows.flat(1).find(({ type }) => type === 'toggle_single') ? 'checkbox' : 'radio');
 
         setModel(model => {
-            const fields = resource()?.form.rows.reduce<Record<number,boolean>>((carry, group) => {
+            const fields = data.form.rows.reduce<Record<number,boolean>>((carry, group) => {
                 return Object.assign(carry, Object.fromEntries(
                     Object.entries(group).map(([, row]) => [row.id, row.checked])
                 ));
             }, {}) ?? {};
             
             return Object.assign({}, model, {
-                email: resource()?.subscriber?.email,
+                email: data.subscriber?.email,
                 sid: params.sid,
                 fields
             });
@@ -96,13 +110,12 @@ function PreferenceForm(options: PreferenceFormOptions) {
     }
 
     function getAllFields() {
-        return resource()
-            ?.form.rows
+        return form()?.form.rows
             .flat(1) ?? [];
     }
 
     function getUnsubFields() {
-        return resource()
+        return form()
             ?.form.rows
             .flat(1)
             .filter(({ type }) => ['unsub'].includes(type)) ?? [];
@@ -182,62 +195,66 @@ function PreferenceForm(options: PreferenceFormOptions) {
 
     return (
         <>
-            <Show when={resource()} fallback={<ActivityIndicator />}>
-                <form onsubmit={onSubmit} class={options?.theme?.className()}>
-                    <div class="form-heading">{resource()?.form.heading}</div>
-                    <Show when={error()?.message}>
-                        <div class="form-error-message">
-                            <div class="form-heading">
+            <div class={options?.theme?.className()}>
+                <Show when={!resource.loading} fallback={<ActivityIndicator />}>
+                    <form onsubmit={onSubmit}>
+                        <div class="form-heading">{form()?.form.heading}</div>
+                        <Show when={error()?.message}>
+                            <div class="form-error-message">
+                                <div class="form-heading">
                                 An error has occurred
+                                </div>
+                                {error()?.message ?? 'An unexpected error has occurred.'}
                             </div>
-                            {error()?.message ?? 'An unexpected error has occurred.'}
-                        </div>
-                    </Show>
-                    <div class="form-fields">
-                        <div class="form-field-group">
-                            <div class="form-field-row">
-                                <InputField
-                                    label="Email"
-                                    errors={error()?.errors?.email}
-                                    value={model.email}
-                                    oninput={e => handleInputChange(e, 'email')} />
-                            </div>
-                        </div>
-                        <For each={resource()?.form.rows}>{(group) =>
-                            <div class="form-field-group">
-                                <For each={group}>{(row) =>
+                        </Show>
+                        <Show when={form()}>
+                            <div class="form-fields">
+                                <div class="form-field-group">
                                     <div class="form-field-row">
-                                        <Switch>
-                                            <Match when={fieldType() === 'checkbox' || row.type === 'pause'}>
-                                                <CheckboxField
-                                                    label={row.label}
-                                                    id={String(row.id)}
-                                                    errors={!!error()?.errors?.fields}
-                                                    checked={model?.fields[row.id]}
-                                                    oninput={e => handleCheckboxInput(e, row)} />
-                                            </Match>
-                                            <Match when={fieldType() === 'radio'}>
-                                                <RadioField
-                                                    label={row.label}
-                                                    id={String(row.id)}
-                                                    name="pref"
-                                                    errors={!!error()?.errors?.fields}
-                                                    checked={model?.fields[row.id]}
-                                                    oninput={e => handleRadioInput(e, row)}  />
-                                            </Match>
-                                        </Switch>
+                                        <InputField
+                                            label="Email"
+                                            errors={error()?.errors?.email}
+                                            value={model.email}
+                                            oninput={e => handleInputChange(e, 'email')} />
+                                    </div>
+                                </div>
+                                <For each={form()?.form.rows}>{(group) =>
+                                    <div class="form-field-group">
+                                        <For each={group}>{(row) =>
+                                            <div class="form-field-row">
+                                                <Switch>
+                                                    <Match when={fieldType() === 'checkbox' || row.type === 'pause'}>
+                                                        <CheckboxField
+                                                            label={row.label}
+                                                            id={String(row.id)}
+                                                            errors={!!error()?.errors?.fields}
+                                                            checked={model?.fields[row.id]}
+                                                            oninput={e => handleCheckboxInput(e, row)} />
+                                                    </Match>
+                                                    <Match when={fieldType() === 'radio'}>
+                                                        <RadioField
+                                                            label={row.label}
+                                                            id={String(row.id)}
+                                                            name="pref"
+                                                            errors={!!error()?.errors?.fields}
+                                                            checked={model?.fields[row.id]}
+                                                            oninput={e => handleRadioInput(e, row)}  />
+                                                    </Match>
+                                                </Switch>
+                                            </div>
+                                        }</For>
                                     </div>
                                 }</For>
                             </div>
-                        }</For>
-                    </div>
-                    <div class="form-action">
-                        <button disabled={submitting()} class="form-button">
+                            <div class="form-action">
+                                <button disabled={submitting()} class="form-button">
                             Save
-                        </button>
-                    </div>
-                </form>
-            </Show>
+                                </button>
+                            </div>
+                        </Show>
+                    </form>
+                </Show>
+            </div>
         </>
     );
 }

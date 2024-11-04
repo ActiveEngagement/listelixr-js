@@ -98,49 +98,51 @@ function SubscribeForm(options: SubscribeFormOptions) {
 
     return (
         <>
-            <form onsubmit={onSubmit} class={options?.theme?.className()}>
-                <Show when={!!options.heading}>
-                    <div class="form-heading">{options.heading}</div>
-                </Show>
-                <Show when={success()}>
-                    <div class="form-success-message">
-                        <div class="form-heading">
+            <div class={options?.theme?.className()}>
+                <form onsubmit={onSubmit}>
+                    <Show when={!!options.heading}>
+                        <div class="form-heading">{options.heading}</div>
+                    </Show>
+                    <Show when={success()}>
+                        <div class="form-success-message">
+                            <div class="form-heading">
                             Success!
-                        </div>
-                        You have been subscribed to list.
-                    </div>
-                </Show>
-                <Show when={error()?.message}>
-                    <div class="form-error-message">
-                        <div class="form-heading">
-                            An error has occurred
-                        </div>
-                        {error()?.message ?? 'An unexpected error has occurred.'}
-                    </div>
-                </Show>
-                <div class="form-fields">
-                    <For each={options.fields}>{(field) =>
-                        <div class="form-field-group">
-                            <div class="form-field-row">
-                                <InputField
-                                    label={labels?.[field] + (
-                                        requiredFields.includes(field) ? '*' : ''
-                                    )}
-                                    errors={error()?.errors?.[field]}
-                                    value={model?.[field]}
-                                    required={requiredFields?.includes(field)}
-                                    oninput={e => handleInputChange(e, field)} />
                             </div>
+                        You have been subscribed to list.
                         </div>
-                    }</For>
-                </div>
+                    </Show>
+                    <Show when={error()?.message}>
+                        <div class="form-error-message">
+                            <div class="form-heading">
+                            An error has occurred
+                            </div>
+                            {error()?.message ?? 'An unexpected error has occurred.'}
+                        </div>
+                    </Show>
+                    <div class="form-fields">
+                        <For each={options.fields}>{(field) =>
+                            <div class="form-field-group">
+                                <div class="form-field-row">
+                                    <InputField
+                                        label={labels?.[field] + (
+                                            requiredFields.includes(field) ? '*' : ''
+                                        )}
+                                        errors={error()?.errors?.[field]}
+                                        value={model?.[field]}
+                                        required={requiredFields?.includes(field)}
+                                        oninput={e => handleInputChange(e, field)} />
+                                </div>
+                            </div>
+                        }</For>
+                    </div>
                 
-                <div class="form-action">
-                    <button disabled={submitting()} class="form-button">
+                    <div class="form-action">
+                        <button disabled={submitting()} class="form-button">
                         Subscribe
-                    </button>
-                </div>
-            </form>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </>
     );
 }

@@ -170,13 +170,40 @@ export const base = theme({
 });
 
 export const defaultTheme = base.extend({
-    lineHeight: 1.15,
-    '-webkit-text-size-adjust': '100%',
-    '-moz-tab-size': 4,
-    tabSize: 4,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1rem',
+    '@keyframes animloader': {
+        '0%': {
+            transform: 'scale(0)',
+            opacity: '1'
+        },
+        '100%': {
+            transform: 'scale(1)',
+            opacity: '0'
+        }
+    },
+
+    'form, &': {
+        lineHeight: 1.15,
+        '-webkit-text-size-adjust': '100%',
+        '-moz-tab-size': 4,
+        tabSize: 4,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+    },
+    
+    '.activity-indicator': {
+        width: '48px',
+        height: '48px',
+        background: 'gray',
+        display: 'inline-block',
+        borderRadius: '50%',
+        boxSizing: 'border-box',
+        animation: 'animloader 1s ease-in infinite',
+
+        '& .activity-indicator-label': {
+            display: 'none'
+        }
+    },
 
     '.form-error-message': {
         display: 'flex',
