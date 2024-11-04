@@ -10,6 +10,7 @@ export type SubscribeFormOptions = {
     key: string;
     theme?: Theme;
     fields: Partial<SubscribeFormField>[];
+    requiredFields?: Partial<SubscribeFormField>[];
     labels?: Partial<Record<SubscribeFormField,string>>;
     heading?: string;
     tags?: string[];
@@ -118,9 +119,12 @@ function SubscribeForm(options: SubscribeFormOptions) {
                         <div class="form-field-group">
                             <div class="form-field-row">
                                 <InputField
-                                    label={labels?.[field]}
+                                    label={labels?.[field] + (
+                                        options.requiredFields?.includes(field) ? '*' : ''
+                                    )}
                                     errors={error()?.errors?.[field]}
                                     value={model?.[field]}
+                                    required={options.requiredFields?.includes(field)}
                                     oninput={e => handleInputChange(e, field)} />
                             </div>
                         </div>
