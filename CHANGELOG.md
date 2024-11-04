@@ -1,3 +1,10 @@
+# [1.0.0-beta.19](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.18...v1.0.0-beta.19) (2024-11-04)
+
+
+### Bug Fixes
+
+* make email field always required ([1655664](https://github.com/ActiveEngagement/listelixr-js/commit/16556648475c6b89145d72d76c55357738c4d2a6))
+
 # [1.0.0-beta.18](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.17...v1.0.0-beta.18) (2024-11-04)
 
 
