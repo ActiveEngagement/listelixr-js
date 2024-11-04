@@ -32,6 +32,10 @@ function SubscribeForm(options: SubscribeFormOptions) {
         'Authorization': `Bearer ${options.key}`
     };
 
+    const requiredFields = [
+        'email', ...(options.requiredFields ?? [])
+    ];
+
     const labels: Record<SubscribeFormField,string> = Object.assign({
         email: 'Email Address',
         first: 'First Name',
@@ -120,11 +124,11 @@ function SubscribeForm(options: SubscribeFormOptions) {
                             <div class="form-field-row">
                                 <InputField
                                     label={labels?.[field] + (
-                                        options.requiredFields?.includes(field) ? '*' : ''
+                                        requiredFields.includes(field) ? '*' : ''
                                     )}
                                     errors={error()?.errors?.[field]}
                                     value={model?.[field]}
-                                    required={options.requiredFields?.includes(field)}
+                                    required={requiredFields?.includes(field)}
                                     oninput={e => handleInputChange(e, field)} />
                             </div>
                         </div>
