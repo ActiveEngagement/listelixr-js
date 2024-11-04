@@ -111,7 +111,8 @@ function PreferenceForm(options: PreferenceFormOptions) {
 
     function getAllFields() {
         return form()?.form.rows
-            .flat(1) ?? [];
+            .flat(1)
+            .filter(({ type }) => ['unsub', 'toggle', 'toggle_single'].includes(type)) ?? [];
     }
 
     function getUnsubFields() {
