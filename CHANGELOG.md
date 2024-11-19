@@ -1,3 +1,10 @@
+# [1.0.0-beta.24](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.23...v1.0.0-beta.24) (2024-11-19)
+
+
+### Features
+
+* added fieldHeading options ([cfd185d](https://github.com/ActiveEngagement/listelixr-js/commit/cfd185d4d102113effde2cbdc9cff1d3b29246fd))
+
 # [1.0.0-beta.23](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.22...v1.0.0-beta.23) (2024-11-19)
 
 
