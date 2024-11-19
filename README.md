@@ -114,6 +114,68 @@ ListElixr.preferenceForm(el, {
 </script>
 ```
 
+### Custom Labels and Descriptions
+
+You may wish to add descriptions or custom labels. Both `label` and
+`description` are entirely optional.
+
+```ts
+ListElixr.preferenceForm(document.querySelector('#app1') as Element, {
+    key: 'b85cbb19-b0c2-49f2-b3b0-7618d008d58e',
+    fields: {
+        email: {
+            label: 'Your Email:'
+        },
+        'Daily': {
+            description: 'Weekdays - Most Popular | <a href="">Sample</a>' 
+        },
+        'Weekend': {
+            description: 'Sunday | <a href="">Sample</a>' 
+        },
+        'ICYMI': {
+            description: 'Saturday | <a href="">Sample</a>' 
+        },
+        'Breaking': {
+            description: 'As needed | <a href="">Sample</a>' 
+        },
+        'Freedom Post': {
+            description: 'Twice a week | <a href="">Sample</a>' 
+        },
+        'Exclusive Offers': {
+            description: 'Thrice a week | <a href="">Sample</a>' 
+        },
+        'Marketers': {
+            description: 'Once a month | <a href="">Sample</a>' 
+        }
+    }
+})
+```
+
+### Custom Headings
+
+You may also override the heading and/or add a field heading (which is like a
+subheader). Both `heading` and `fieldHeading` are optional. If nothing is given,
+the defaults on the form will be used.
+
+```ts
+ListElixr.preferenceForm(document.querySelector('#app1') as Element, {
+    key: 'b85cbb19-b0c2-49f2-b3b0-7618d008d58e',
+    heading: 'My Custom Heading',
+    fieldHeading: 'My Custom Subheader'
+})
+```
+
+### Remove the Heading
+
+You may also remove the heading on the form by passing `false`.
+
+```ts
+ListElixr.preferenceForm(document.querySelector('#app1') as Element, {
+    key: 'b85cbb19-b0c2-49f2-b3b0-7618d008d58e',
+    heading: false
+})
+```
+
 ## Themes
 
 The widgets all support CSS-in-JS styling. Alternatively, you may style the widgets using traditional CSS. However, the CSS-in-JS solutions are much easier and provide sensible defaults. 
@@ -188,4 +250,47 @@ ListElixr.preferenceForm(el, {
     theme,
     // your options here...
 });
+```
+
+### Toggle Switches
+
+Below is an example theme for how to convert checkboxes to toggle switches.
+
+```ts
+// Toggle fields
+ListElixr.theme({
+    '[type=checkbox]': {
+        appearance: 'none',
+        backgroundColor: '#dfe1e4',
+        borderRadius: '72px',
+        borderStyle: 'none',
+        flexShrink: 0,
+        height: '24px',
+        margin: '0',
+        position: 'relative',
+        width: '39px',
+        cursor: 'default',
+
+        '&::after': {
+            backgroundColor: '#fff',
+            borderRadius: '50%',
+            content: '""',
+            height: '1.25rem',
+            width: '1.25rem',
+            position: 'absolute',
+            left: '.125rem',
+            top: '.125rem',
+            transition: 'all 100ms ease-out'
+        },
+
+        '&:checked': {
+            backgroundColor: '#1774ce',
+
+            '&::after': {
+                backgroundColor: '#fff',
+                left: 'calc(39px - 1.25rem - .125rem)'
+            },
+        }
+    },
+})
 ```
