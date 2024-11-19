@@ -47,8 +47,6 @@ export function CheckboxField(props: FormControlProps) {
         props, ['errors', 'label', 'id'], ['class', 'description']
     );
 
-    console.log(props.label);
-
     return (
         <FormField {...fieldAttrs} data-id={fieldAttrs.id} data-label={props.label}>
             <label class="form-label">
