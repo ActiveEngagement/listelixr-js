@@ -1,3 +1,10 @@
+# [1.0.0-beta.22](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.21...v1.0.0-beta.22) (2024-11-19)
+
+
+### Features
+
+* added ability to add custom descriptions, labels, and multiple themes ([c416b62](https://github.com/ActiveEngagement/listelixr-js/commit/c416b62b5d1d405ca26ac59eb5b9c7d76773ef96))
+
 # [1.0.0-beta.21](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.20...v1.0.0-beta.21) (2024-11-04)
 
 
