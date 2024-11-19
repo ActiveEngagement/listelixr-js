@@ -26,6 +26,7 @@ export type PreferenceFormOptions = {
     key: string;
     theme?: Theme | Theme[];
     heading?: string|false;
+    fieldHeading?: string;
     fields?: Record<string|number, {
         label?: string;
         description?: string;   
@@ -227,6 +228,9 @@ function PreferenceForm(options: PreferenceFormOptions) {
                                             oninput={e => handleInputChange(e, 'email')} />
                                     </div>
                                 </div>
+                                <Show when={options.fieldHeading}>
+                                    <div class="form-fields-heading" innerHTML={options.fieldHeading} />
+                                </Show>
                                 <For each={form()?.form.rows}>{(group) =>
                                     <div class="form-field-group">
                                         <For each={group}>{(row) =>

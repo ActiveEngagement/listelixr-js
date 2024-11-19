@@ -19,6 +19,7 @@ import { base } from './theme';
 preferenceForm(document.querySelector('#app1') as Element, {
     key: 'b85cbb19-b0c2-49f2-b3b0-7618d008d58e',
     heading: false,
+    fieldHeading: '<h2>Get the following newsletters:</h2><p class="quiet">Newsletters are free for everyone</p>',
     fields: {
         email: {
             label: 'Your Email:'
@@ -51,7 +52,7 @@ preferenceForm(document.querySelector('#app1') as Element, {
             '.form-action': {
                 marginTop: '3.125rem',
                 textAlign: 'center',
-                
+
                 'button': {
                     padding: '.625rem 3.125rem',
                     fontSize: '1.125rem',
