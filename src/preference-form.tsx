@@ -25,6 +25,7 @@ export type PreferenceForm = {
 export type PreferenceFormOptions = {
     key: string;
     theme?: Theme | Theme[];
+    heading?: string|false;
     fields?: Record<string|number, {
         label?: string;
         description?: string;   
@@ -203,7 +204,9 @@ function PreferenceForm(options: PreferenceFormOptions) {
             <div class={Array.isArray(options?.theme) ? options.theme.map(theme => theme.className()).join(' ') : options.theme?.className()}>
                 <Show when={!resource.loading} fallback={<ActivityIndicator />}>
                     <form onsubmit={onSubmit}>
-                        <div class="form-heading">{form()?.form.heading}</div>
+                        <Show when={options.heading !== false && form()?.form.heading}>
+                            <div class="form-heading">{options.heading ? options.heading : form()?.form.heading}</div>
+                        </Show>
                         <Show when={error()?.message}>
                             <div class="form-error-message">
                                 <div class="form-heading">
