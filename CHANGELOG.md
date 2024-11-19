@@ -1,3 +1,10 @@
+# [1.0.0-beta.21](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.20...v1.0.0-beta.21) (2024-11-04)
+
+
+### Bug Fixes
+
+* improved ux ([de38048](https://github.com/ActiveEngagement/listelixr-js/commit/de380488571d1440a47dc7dc419e3d16fe774c80))
+
 # [1.0.0-beta.20](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.19...v1.0.0-beta.20) (2024-11-04)
 
 
