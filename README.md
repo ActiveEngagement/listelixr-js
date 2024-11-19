@@ -117,7 +117,7 @@ ListElixr.preferenceForm(el, {
 ### Custom Labels and Descriptions
 
 You may wish to add descriptions or custom labels. Both `label` and
-`description` are entirely optional.
+`description` are optional.
 
 ```ts
 ListElixr.preferenceForm(document.querySelector('#app1') as Element, {
@@ -241,14 +241,36 @@ const el = document.querySelector('#foo');
 
 // If you are using the subscribe form...
 ListElixr.subscribeForm(el, {
+    key: 'the-access-token-goes-here',
     theme,
     // your options here...
 });
 
 // Or for the preference form...
 ListElixr.preferenceForm(el, {
+    key: 'the-access-token-goes-here',
     theme,
     // your options here...
+});
+```
+
+### Using Multiple Themes
+
+You may also pass an array of themes if you wish to break the themes up into
+smaller chunks.
+
+```ts
+// If you are using the subscribe form...
+ListElixr.subscribeForm(el, {
+    key: 'the-access-token-goes-here',
+    theme: [
+        ListElixr.theme({
+            // define the theme rules here...
+        }),
+        ListElixr.theme({
+            // define the theme rules here...
+        })
+    ]
 });
 ```
 
@@ -257,40 +279,43 @@ ListElixr.preferenceForm(el, {
 Below is an example theme for how to convert checkboxes to toggle switches.
 
 ```ts
-// Toggle fields
-ListElixr.theme({
-    '[type=checkbox]': {
-        appearance: 'none',
-        backgroundColor: '#dfe1e4',
-        borderRadius: '72px',
-        borderStyle: 'none',
-        flexShrink: 0,
-        height: '24px',
-        margin: '0',
-        position: 'relative',
-        width: '39px',
-        cursor: 'default',
-
-        '&::after': {
-            backgroundColor: '#fff',
-            borderRadius: '50%',
-            content: '""',
-            height: '1.25rem',
-            width: '1.25rem',
-            position: 'absolute',
-            left: '.125rem',
-            top: '.125rem',
-            transition: 'all 100ms ease-out'
-        },
-
-        '&:checked': {
-            backgroundColor: '#1774ce',
+ListElixr.subscribeForm(el, {
+    key: 'the-access-token-goes-here',
+    theme: ListElixr.theme({
+        '[type=checkbox]': {
+            appearance: 'none',
+            backgroundColor: '#dfe1e4',
+            borderRadius: '72px',
+            borderStyle: 'none',
+            flexShrink: 0,
+            height: '24px',
+            margin: '0',
+            position: 'relative',
+            width: '39px',
+            cursor: 'default',
 
             '&::after': {
                 backgroundColor: '#fff',
-                left: 'calc(39px - 1.25rem - .125rem)'
+                borderRadius: '50%',
+                content: '""',
+                height: '1.25rem',
+                width: '1.25rem',
+                position: 'absolute',
+                left: '.125rem',
+                top: '.125rem',
+                transition: 'all 100ms ease-out'
             },
-        }
-    },
-})
+
+            '&:checked': {
+                backgroundColor: '#1774ce',
+
+                '&::after': {
+                    backgroundColor: '#fff',
+                    left: 'calc(39px - 1.25rem - .125rem)'
+                },
+            }
+        },
+    })
+});
+
 ```
