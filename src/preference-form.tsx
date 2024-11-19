@@ -229,7 +229,7 @@ function PreferenceForm(options: PreferenceFormOptions) {
                                     </div>
                                 </div>
                                 <Show when={options.fieldHeading}>
-                                    <div class="form-fields-heading" innerHTML={options.fieldHeading} />
+                                    <div class="form-heading" innerHTML={options.fieldHeading} />
                                 </Show>
                                 <For each={form()?.form.rows}>{(group) =>
                                     <div class="form-field-group">
