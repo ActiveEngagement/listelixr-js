@@ -1,3 +1,10 @@
+# [1.0.0-beta.23](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.22...v1.0.0-beta.23) (2024-11-19)
+
+
+### Bug Fixes
+
+* remove console.log ([297d53b](https://github.com/ActiveEngagement/listelixr-js/commit/297d53b86bd9a68d83451cd80e1ef96c1fc4c94e))
+
 # [1.0.0-beta.22](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.21...v1.0.0-beta.22) (2024-11-19)
 
 
