@@ -11,8 +11,8 @@ export type ValidationErrors = HttpError & {
 export type FormFieldProps = {
     errors?: string[]|boolean;
     label?: string;
+    description?: string;
     id?: string;
-	// children: JSXElement|JSXElement[];
 } & Record<string,any>
 
 export function FormField(props: FormFieldProps) {    
@@ -43,50 +43,67 @@ type FormControlProps = FormFieldProps & Record<string,any> & {
 }
 
 export function CheckboxField(props: FormControlProps) {
-    const [ fieldAttrs, { 'class': classes }, attrs ] = splitProps(
-        props, ['errors', 'label', 'id'], ['class']
+    const [ fieldAttrs, { 'class': classes, description }, attrs ] = splitProps(
+        props, ['errors', 'label', 'id'], ['class', 'description']
     );
 
+    console.log(props.label);
+
     return (
-        <FormField {...fieldAttrs}>
+        <FormField {...fieldAttrs} data-id={fieldAttrs.id} data-label={props.label}>
             <label class="form-label">
                 <input type="checkbox" {...attrs} classList={{
                     'form-control': true,
                     [classes]: true,
                 }} oninput={props.oninput} />
-                {props.label}
+                <Show when={props.label}>
+                    <div class="form-label-text">{props.label?.trim()}</div>
+                </Show>
+                <Show when={description}>
+                    <div class="form-label-description" innerHTML={description} />
+                </Show>
             </label>            
         </FormField>
     );
 }
 
 export function RadioField(props: FormControlProps) {
-    const [ fieldAttrs, { 'class': classes }, attrs ] = splitProps(
-        props, ['errors', 'label', 'id'], ['class']
+    const [ fieldAttrs, { 'class': classes, description }, attrs ] = splitProps(
+        props, ['errors', 'label', 'id'], ['class', 'description']
     );
 
     return (
-        <FormField {...fieldAttrs}>
+        <FormField {...fieldAttrs} data-id={fieldAttrs.id} data-label={props.label}>
             <label class="form-label">
                 <input type="radio" {...attrs} classList={{
                     'form-control': true,
                     [classes]: true,
                 }} oninput={props.oninput} />
-                {props.label}
+                <Show when={props.label}>
+                    <div class="form-label-text">{props.label?.trim()}</div>
+                </Show>
+                <Show when={description}>
+                    <div class="form-label-description" innerHTML={description} />
+                </Show>
             </label>            
         </FormField>
     );
 }
 
 export function InputField(props: FormControlProps) {
-    const [ fieldAttrs, { 'class': classes }, attrs ] = splitProps(
-        props, ['errors', 'label', 'id'], ['class']
+    const [ fieldAttrs, { 'class': classes, description }, attrs ] = splitProps(
+        props, ['errors', 'label', 'id'], ['class', 'description']
     );
 
     return (
-        <FormField {...fieldAttrs}>
+        <FormField {...fieldAttrs} data-id={fieldAttrs.id} data-label={props.label}>
             <Show when={props.label}>
-                <label for={props.id} class="form-label">{props.label}</label>
+                <label for={props.id} class="form-label">
+                    <div class="form-label-text">{props.label}</div>
+                    <Show when={description}>
+                        <div class="form-label-description" innerHTML={description} />
+                    </Show>
+                </label>
             </Show>
             <input {...attrs} classList={{
                 'form-control': true,

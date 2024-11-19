@@ -8,7 +8,7 @@ export type SubscribeFormField = 'email' | 'first' | 'last' | 'street' | 'state'
 
 export type SubscribeFormOptions = {
     key: string;
-    theme?: Theme;
+    theme?: Theme | Theme[];
     fields: Partial<SubscribeFormField>[];
     requiredFields?: Partial<SubscribeFormField>[];
     labels?: Partial<Record<SubscribeFormField,string>>;
@@ -98,7 +98,7 @@ function SubscribeForm(options: SubscribeFormOptions) {
 
     return (
         <>
-            <div class={options?.theme?.className()}>
+            <div class={Array.isArray(options?.theme) ? options.theme.map(theme => theme.className()).join(' ') : options.theme?.className()}>
                 <form onsubmit={onSubmit}>
                     <Show when={!!options.heading}>
                         <div class="form-heading">{options.heading}</div>

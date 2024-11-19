@@ -24,7 +24,11 @@ export type PreferenceForm = {
 
 export type PreferenceFormOptions = {
     key: string;
-    theme?: Theme;
+    theme?: Theme | Theme[];
+    fields?: Record<string|number, {
+        label?: string;
+        description?: string;   
+    }>;
 }
 
 export type PreferenceFormModel = {
@@ -196,7 +200,7 @@ function PreferenceForm(options: PreferenceFormOptions) {
 
     return (
         <>
-            <div class={options?.theme?.className()}>
+            <div class={Array.isArray(options?.theme) ? options.theme.map(theme => theme.className()).join(' ') : options.theme?.className()}>
                 <Show when={!resource.loading} fallback={<ActivityIndicator />}>
                     <form onsubmit={onSubmit}>
                         <div class="form-heading">{form()?.form.heading}</div>
@@ -213,7 +217,8 @@ function PreferenceForm(options: PreferenceFormOptions) {
                                 <div class="form-field-group">
                                     <div class="form-field-row">
                                         <InputField
-                                            label="Email"
+                                            label={options.fields?.email?.label ?? 'Email'}
+                                            description={options.fields?.email?.description}
                                             errors={error()?.errors?.email}
                                             value={model.email}
                                             oninput={e => handleInputChange(e, 'email')} />
@@ -226,7 +231,8 @@ function PreferenceForm(options: PreferenceFormOptions) {
                                                 <Switch>
                                                     <Match when={fieldType() === 'checkbox' || row.type === 'pause'}>
                                                         <CheckboxField
-                                                            label={row.label}
+                                                            label={options.fields?.[row.id]?.label ?? options.fields?.[row.label]?.label ?? row.label}
+                                                            description={(options.fields?.[row.id] ?? options.fields?.[row.label])?.description}
                                                             id={String(row.id)}
                                                             errors={!!error()?.errors?.fields}
                                                             checked={model?.fields[row.id]}
@@ -234,7 +240,8 @@ function PreferenceForm(options: PreferenceFormOptions) {
                                                     </Match>
                                                     <Match when={fieldType() === 'radio'}>
                                                         <RadioField
-                                                            label={row.label}
+                                                            label={options.fields?.[row.id]?.label ?? options.fields?.[row.label]?.label ?? row.label}
+                                                            description={(options.fields?.[row.id] ?? options.fields?.[row.label])?.description}
                                                             id={String(row.id)}
                                                             name="pref"
                                                             errors={!!error()?.errors?.fields}
@@ -249,7 +256,7 @@ function PreferenceForm(options: PreferenceFormOptions) {
                             </div>
                             <div class="form-action">
                                 <button disabled={submitting()} class="form-button">
-                            Save
+                                    Save
                                 </button>
                             </div>
                         </Show>
