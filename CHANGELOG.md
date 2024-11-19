@@ -1,3 +1,10 @@
+# [1.0.0-beta.25](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.24...v1.0.0-beta.25) (2024-11-19)
+
+
+### Bug Fixes
+
+* made classname consistent with field headings ([a16c34d](https://github.com/ActiveEngagement/listelixr-js/commit/a16c34d92fa7618c929941377d57050165dc09c7))
+
 # [1.0.0-beta.24](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.23...v1.0.0-beta.24) (2024-11-19)
 
 
