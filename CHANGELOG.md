@@ -1,3 +1,10 @@
+# [1.0.0-beta.26](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.25...v1.0.0-beta.26) (2024-11-22)
+
+
+### Features
+
+* refresh form state when email is entered and added success message on submit ([b5a4b1e](https://github.com/ActiveEngagement/listelixr-js/commit/b5a4b1eac6561859da8b3a5d558a849e2bfcf381))
+
 # [1.0.0-beta.25](https://github.com/ActiveEngagement/listelixr-js/compare/v1.0.0-beta.24...v1.0.0-beta.25) (2024-11-19)
 
 
