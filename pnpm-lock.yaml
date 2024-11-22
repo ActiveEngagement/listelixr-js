@@ -8,6 +8,9 @@ dependencies:
   goober:
     specifier: ^2.1.16
     version: 2.1.16(csstype@3.1.3)
+  lodash.debounce:
+    specifier: ^4.0.8
+    version: 4.0.8
   solid-js:
     specifier: ^1.9.3
     version: 1.9.3
@@ -25,6 +28,9 @@ devDependencies:
   '@semantic-release/npm':
     specifier: ^10.0.6
     version: 10.0.6(semantic-release@21.1.2)
+  '@types/lodash.debounce':
+    specifier: ^4.0.9
+    version: 4.0.9
   '@vue-interface/eslint-config':
     specifier: 1.0.0-beta.4
     version: 1.0.0-beta.4
@@ -1197,6 +1203,16 @@ packages:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
     dev: true
 
+  /@types/lodash.debounce@4.0.9:
+    resolution: {integrity: sha512-Ma5JcgTREwpLRwMM+XwBR7DaWe96nC38uCBDFKZWbNKD+osjVzdpnUSwBcqCptrp16sSOLBAUb50Car5I0TCsQ==}
+    dependencies:
+      '@types/lodash': 4.17.13
+    dev: true
+
+  /@types/lodash@4.17.13:
+    resolution: {integrity: sha512-lfx+dftrEZcdBPczf9d0Qv0x+j/rfNCMuC6OcfXmO8gkfeNAY88PgKUbvG56whcN23gc27yenwF6oJZXGFpYxg==}
+    dev: true
+
   /@types/minimist@1.2.5:
     resolution: {integrity: sha512-hov8bUuiLiyFPGyFPE1lwWhmzYbirOXQNNo40+y3zow8aFVTeyn3VWL0VFFfdNddA8S4Vf0Tc062rzyNr7Paag==}
     dev: true
@@ -1309,7 +1325,7 @@ packages:
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.6.3
-      tsutils: 3.21.0(typescript@5.6.3)
+      tsutils: 3.21.0(typescript@4.9.5)
       typescript: 4.9.5
     transitivePeerDependencies:
       - supports-color
@@ -1591,8 +1607,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001680
-      electron-to-chromium: 1.5.63
+      caniuse-lite: 1.0.30001683
+      electron-to-chromium: 1.5.64
       node-releases: 2.0.18
       update-browserslist-db: 1.1.1(browserslist@4.24.2)
     dev: true
@@ -1616,8 +1632,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /caniuse-lite@1.0.30001680:
-    resolution: {integrity: sha512-rPQy70G6AGUMnbwS1z6Xg+RkHYPAi18ihs47GH0jcxIG7wArmPgY3XbS2sRdBbxJljp3thdT8BIqv9ccCypiPA==}
+  /caniuse-lite@1.0.30001683:
+    resolution: {integrity: sha512-iqmNnThZ0n70mNwvxpEC2nBJ037ZHZUoBI5Gorh1Mw6IlEAZujEoU1tXA628iZfzm7R9FvFzxbfdgml82a3k8Q==}
     dev: true
 
   /cardinal@2.1.1:
@@ -1946,8 +1962,8 @@ packages:
       readable-stream: 2.3.8
     dev: true
 
-  /electron-to-chromium@1.5.63:
-    resolution: {integrity: sha512-ddeXKuY9BHo/mw145axlyWjlJ1UBt4WK3AlvkT7W2AbqfRQoacVoRUCF6wL3uIx/8wT9oLKXzI+rFqHHscByaA==}
+  /electron-to-chromium@1.5.64:
+    resolution: {integrity: sha512-IXEuxU+5ClW2IGEYFC2T7szbyVgehupCWQe5GNh+H065CD6U6IFN0s4KeAMFGNmQolRU4IV7zGBWSYMmZ8uuqQ==}
     dev: true
 
   /emoji-regex@8.0.0:
@@ -2896,6 +2912,10 @@ packages:
   /lodash.capitalize@4.2.1:
     resolution: {integrity: sha512-kZzYOKspf8XVX5AvmQF94gQW0lejFVgb80G85bU4ZWzoJ6C03PQg3coYAUpSTpQWelrZELd3XWgHzw4Ck5kaIw==}
     dev: true
+
+  /lodash.debounce@4.0.8:
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: false
 
   /lodash.escaperegexp@4.1.2:
     resolution: {integrity: sha512-TM9YBvyC84ZxE3rgfefxUWiQKLilstD6k7PTGt6wfbtXF8ixIJLOL3VYyV/z+ZiPLsVxAsKAFVwWlWeb2Y8Yyw==}

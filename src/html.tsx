@@ -39,7 +39,8 @@ export function FormField(props: FormFieldProps) {
 
 type FormControlProps = FormFieldProps & Record<string,any> & {
     name?: string;
-    oninput?: (e: InputEvent) => void;
+    // oninput?: (e: InputEvent) => void;
+    // onblur?: (e: InputEvent) => void;
 }
 
 export function CheckboxField(props: FormControlProps) {
@@ -53,7 +54,7 @@ export function CheckboxField(props: FormControlProps) {
                 <input type="checkbox" {...attrs} classList={{
                     'form-control': true,
                     [classes]: true,
-                }} oninput={props.oninput} />
+                }} />
                 <Show when={props.label}>
                     <div class="form-label-text">{props.label?.trim()}</div>
                 </Show>

@@ -39,6 +39,18 @@ export type PreferenceFormModel = {
     fields: Record<string, boolean>;
 }
 
+function debounce(callback: Function, wait: number) {
+    let timeoutId: number|undefined = undefined;
+    
+    return (...args: any[]) => {
+        window.clearTimeout(timeoutId);
+
+        timeoutId = window.setTimeout(() => {
+            callback.apply(null, ...args);
+        }, wait);
+    };
+}
+
 function PreferenceForm(options: PreferenceFormOptions) {
     const endpoint = `${import.meta.env.VITE_PREFERENCE_FORM_URL}/${options?.key}`;
     const params = Object.fromEntries(new URLSearchParams(window.location.search));
@@ -52,19 +64,28 @@ function PreferenceForm(options: PreferenceFormOptions) {
     const [submitting, setSubmitting] = createSignal(false);
     const [error, setError] = createSignal<ValidationErrors>();
     const [fieldType, setFieldType] = createSignal<'radio'|'checkbox'>();
-
-    const [ resource ] = createResource<PreferenceForm|HttpError>(async () => {
+    const [email, setEmail] = createSignal<string|null|undefined>(params.email);
+    const [loaded, setLoaded] = createSignal(false);
+    const [success, setSuccess] = createSignal(false);
+    
+    const [ resource, { refetch }] = createResource<PreferenceForm|HttpError>(async () => {
         const url = new URL(endpoint);
     
-        if(params.email) {
-            url.searchParams.set('email', params.email);
+        const currentEmail = email();
+
+        if(currentEmail) {
+            url.searchParams.set('email', currentEmail);
         }
         else if(params.sid) {
             url.searchParams.set('sid', params.sid);
         }
 
-        return (await fetch(`${url}`, { headers })).json();
+        return (await fetch(`${url}`, { headers }).finally(() => {
+            setLoaded(true);
+        })).json();
     });
+
+    const refetchResource = debounce(refetch, 500);
 
     const [ model, setModel ] = createStore<PreferenceFormModel>({
         email: params.email,
@@ -88,7 +109,9 @@ function PreferenceForm(options: PreferenceFormOptions) {
         }
 
         setForm(data);
-        setFieldType(data.form.rows.flat(1).find(({ type }) => type === 'toggle_single') ? 'checkbox' : 'radio');
+        setFieldType(data.form.rows.flat(1).find(
+            ({ type }) => type === 'toggle_single') ? 'checkbox' : 'radio'
+        );
 
         setModel(model => {
             const fields = data.form.rows.reduce<Record<number,boolean>>((carry, group) => {
@@ -177,6 +200,7 @@ function PreferenceForm(options: PreferenceFormOptions) {
 
         setSubmitting(true);
         setError(undefined);
+        setSuccess(false);
 
         fetch(endpoint, {
             headers,
@@ -185,6 +209,8 @@ function PreferenceForm(options: PreferenceFormOptions) {
             body: JSON.stringify(model),
         }).then(async (response) => {
             if(response.status === 200) {
+                setSuccess(true);
+
                 return;
             }
             else if(response.status === 422) {
@@ -203,7 +229,7 @@ function PreferenceForm(options: PreferenceFormOptions) {
     return (
         <>
             <div class={Array.isArray(options?.theme) ? options.theme.map(theme => theme.className()).join(' ') : options.theme?.className()}>
-                <Show when={!resource.loading} fallback={<ActivityIndicator />}>
+                <Show when={() => !loaded()} fallback={<ActivityIndicator />}>
                     <form onsubmit={onSubmit}>
                         <Show when={options.heading !== false && form()?.form.heading}>
                             <div class="form-heading">{options.heading ? options.heading : form()?.form.heading}</div>
@@ -211,9 +237,15 @@ function PreferenceForm(options: PreferenceFormOptions) {
                         <Show when={error()?.message}>
                             <div class="form-error-message">
                                 <div class="form-heading">
-                                An error has occurred
+                                    An error has occurred
                                 </div>
                                 {error()?.message ?? 'An unexpected error has occurred.'}
+                            </div>
+                        </Show>
+                        <Show when={success()}>
+                            <div class="form-success-message">
+                                <div class="form-heading">Success!</div>
+                                Your preferences have been updated.
                             </div>
                         </Show>
                         <Show when={form()}>
@@ -225,7 +257,11 @@ function PreferenceForm(options: PreferenceFormOptions) {
                                             description={options.fields?.email?.description}
                                             errors={error()?.errors?.email}
                                             value={model.email}
-                                            oninput={e => handleInputChange(e, 'email')} />
+                                            onInput={(e: InputEvent) => {
+                                                handleInputChange(e, 'email');
+                                                setEmail(model.email);
+                                                refetchResource();
+                                            }} />
                                     </div>
                                 </div>
                                 <Show when={options.fieldHeading}>
@@ -243,7 +279,7 @@ function PreferenceForm(options: PreferenceFormOptions) {
                                                             id={String(row.id)}
                                                             errors={!!error()?.errors?.fields}
                                                             checked={model?.fields[row.id]}
-                                                            oninput={e => handleCheckboxInput(e, row)} />
+                                                            onInput={(e: InputEvent) => handleCheckboxInput(e, row)} />
                                                     </Match>
                                                     <Match when={fieldType() === 'radio'}>
                                                         <RadioField
@@ -253,7 +289,7 @@ function PreferenceForm(options: PreferenceFormOptions) {
                                                             name="pref"
                                                             errors={!!error()?.errors?.fields}
                                                             checked={model?.fields[row.id]}
-                                                            oninput={e => handleRadioInput(e, row)}  />
+                                                            onInput={(e: InputEvent) => handleRadioInput(e, row)}  />
                                                     </Match>
                                                 </Switch>
                                             </div>
