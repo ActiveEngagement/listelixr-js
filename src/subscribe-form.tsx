@@ -7,6 +7,7 @@ import type { Theme } from './theme';
 export type SubscribeFormField = 'email' | 'first' | 'last' | 'street' | 'state' | 'zip' | 'phone';
 
 export type SubscribeFormOptions = {
+    endpoint?: string;
     key: string;
     theme?: Theme | Theme[];
     fields: Partial<SubscribeFormField>[];
@@ -21,7 +22,7 @@ export type SubscribeFormOptions = {
 export type SubscribeFormModel = Partial<Record<SubscribeFormField,string|undefined>>;
 
 function SubscribeForm(options: SubscribeFormOptions) {
-    const endpoint = import.meta.env.VITE_SUBSCRIBE_FORM_URL;
+    const endpoint = options.endpoint ?? import.meta.env.VITE_SUBSCRIBE_FORM_URL;
     const [submitting, setSubmitting] = createSignal(false);
     const [error, setError] = createSignal<ValidationErrors>();
     const [success, setSuccess] = createSignal<boolean>(false);
@@ -130,7 +131,7 @@ function SubscribeForm(options: SubscribeFormOptions) {
                                         errors={error()?.errors?.[field]}
                                         value={model?.[field]}
                                         required={requiredFields?.includes(field)}
-                                        oninput={e => handleInputChange(e, field)} />
+                                        onInput={(e: InputEvent) => handleInputChange(e, field)} />
                                 </div>
                             </div>
                         }</For>

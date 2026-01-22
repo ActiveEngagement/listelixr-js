@@ -23,6 +23,7 @@ export type PreferenceForm = {
 }
 
 export type PreferenceFormOptions = {
+    endpoint?: string;
     key: string;
     theme?: Theme | Theme[];
     heading?: string|false;
@@ -52,7 +53,7 @@ function debounce(callback: Function, wait: number) {
 }
 
 function PreferenceForm(options: PreferenceFormOptions) {
-    const endpoint = `${import.meta.env.VITE_PREFERENCE_FORM_URL}/${options?.key}`;
+    const endpoint = `${options.endpoint ?? import.meta.env.VITE_PREFERENCE_FORM_URL}/${options?.key}`;
     const params = Object.fromEntries(new URLSearchParams(window.location.search));
 
     const headers = {
