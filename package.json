@@ -12,7 +12,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc --emitDeclarationOnly --project tsconfig.types.json",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "release": "pnpm build && changeset publish --access public --provenance"
   },
   "browserslist": {
     "production": [
