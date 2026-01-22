@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- 7a2b502: added ability to override endpoint url with form options
+
+## 1.0.0-beta.27
+
+### Patch Changes
+
 - e55b4f8: added ability to override endpoint url with form options
 
 ## 1.0.0-beta.27
