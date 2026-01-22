@@ -279,12 +279,12 @@ export class SubscribeForm {
         this.channel = options.channel;
         this.theme = options.theme ?? defaultTheme;
 
-        let themeClassName = this.theme.className.value;
+        let themeClassName = this.theme.className();
         
         watchEffect(() => {
             this.el.classList.remove(themeClassName);
 
-            themeClassName = this.theme.className.value;
+            themeClassName = this.theme.className();
 
             this.el.classList.add(themeClassName);
         });
