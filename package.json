@@ -1,7 +1,7 @@
 {
   "name": "listelixr-js",
   "private": false,
-  "version": "1.0.0-beta.27",
+  "version": "1.0.0-beta.26",
   "type": "module",
   "types": "dist/index.d.ts",
   "main": "dist/ListElixr.umd.js",
@@ -21,6 +21,10 @@
       "ie 11",
       "not dead"
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ActiveEngagement/listelixr-js"
   },
   "packageManager": "pnpm@10.28.1",
   "devDependencies": {
